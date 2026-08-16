@@ -282,7 +282,7 @@ Say you already have:
 - a `.sops.yaml` file
 - your age key/recipient configured
 
-Add a `path_regex` to `.sops.yaml` so SOPS recognizes `.env` files automatically:
+Add a `path_regex` to `.sops.yaml` so SOPS knows which keys to encrypt this file with:
 
 ```.sops.yaml
 creation_rules:
@@ -297,9 +297,62 @@ You can keep editing `.env` as a normal file, then encrypt it in place whenever 
 sops encrypt --in-place .env
 ```
 
-> ⚠️ No `path_regex` in `.sops.yaml`? Add `--input-type dotenv --output-type dotenv` explicitly, otherwise SOPS defaults to JSON output even though the file is `.env`:
+> ⚠️ Because the file is literally named `.env`, SOPS auto-detects the dotenv format from the filename — `path_regex` only decides which keys to encrypt with, not the format. If you rename the file to something SOPS doesn't recognize (like `.env.production`, covered next), add `--input-type dotenv --output-type dotenv` explicitly, otherwise SOPS defaults to JSON output:
 > ```bash
-> sops encrypt --input-type dotenv --output-type dotenv --in-place .env
+> sops encrypt --input-type dotenv --output-type dotenv --in-place .env.production
 > ```
 
-This encrypts `.env` directly — no separate `.enc.env` file needed. To edit it again, use `sops edit .env`. Decrypt it back to plain text with `sops decrypt --in-place .env` (add the same `--input-type`/`--output-type` flags if you don't have `path_regex`).
+This encrypts `.env` directly — no separate `.enc.env` file needed. To edit it again, use `sops edit .env`. Decrypt it back to plain text with `sops decrypt --in-place .env`.
+
+### Multiple environments (dev, prod) with different access
+
+Real projects usually have more than one `.env` — say one per environment — and not everyone should be able to decrypt every environment. Give each environment file its own `path_regex` and its own set of age recipients in `.sops.yaml`, so a developer's key only unlocks the environments they're meant to access.
+
+Name each file so it still ends in `.env` (e.g. `dev.env`, `prod.env`) — that's what lets SOPS auto-detect the dotenv format automatically, as explained above.
+
+```.sops.yaml
+creation_rules:
+  - path_regex: dev\.env$
+    age: >-
+      age1devxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,
+      age1devyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+    unencrypted_regex: "^(LOG_LEVEL|SERVER_PORT)$"
+
+  - path_regex: prod\.env$
+    age: >-
+      age1opsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,
+      age1opsyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+    unencrypted_regex: "^(LOG_LEVEL|SERVER_PORT)$"
+```
+
+- `dev.env` is encrypted only to the dev team's public keys.
+- `prod.env` is encrypted only to the ops/production team's public keys.
+- SOPS checks `creation_rules` top to bottom and applies the first `path_regex` that matches — put more specific patterns first.
+
+> If you'd rather use the `.env.development` / `.env.production` naming convention, that works too — just remember SOPS won't auto-detect the format from those names, so add `--input-type dotenv --output-type dotenv` to every `encrypt`/`decrypt`/`edit` command, the same way as shown above.
+
+Encrypt each file — the matching rule (and its recipients) is applied automatically:
+
+```bash
+sops encrypt --in-place dev.env
+sops encrypt --in-place prod.env
+```
+
+A developer holding only the dev private key can decrypt `dev.env`, but not `prod.env`:
+
+```bash
+export SOPS_AGE_KEY_FILE=~/.config/sops/age/dev-keys.txt
+
+sops decrypt dev.env
+## DB_PASSWORD=dev-secret
+
+sops decrypt prod.env
+## Failed to get the data key required to decrypt the SOPS file.
+##
+## Group 0: FAILED
+##   age1opsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: FAILED
+##     - | failed to create reader for decrypting sops data key with
+##       | age: no identity matched any of the recipients.
+```
+
+Only someone holding the production private key (`SOPS_AGE_KEY_FILE` pointing at their prod key) can decrypt `prod.env`. To grant or revoke access to one environment, edit that environment's `age` list in `.sops.yaml` and run `sops updatekeys <file>` — the other environment's recipients are untouched.
