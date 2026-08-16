@@ -2,6 +2,23 @@
 
 This is a demo of how to use [SOPS](https://github.com/getsops/sops) to encrypt and decrypt secrets in a development environment.
 
+## Why SOPS?
+
+`.env` secrets are often shared naively — committed to git in plain text, or protected with one password the whole team shares. Here's how SOPS + age compares to two well-known alternatives:
+
+|  | [dotenv.org](https://www.dotenv.org/) | [dotenvx](https://dotenvx.com/) | **SOPS + age** |
+| --- | --- | --- | --- |
+| Encryption at rest | ❌ None — the classic `dotenv` library loads `.env` as plain text | ✅ ECIES + AES-256 — values become ciphertext, keys stay readable | ✅ AES-256 — values become ciphertext |
+| Who holds the decryption key | N/A — nothing is encrypted | One shared `DOTENV_PRIVATE_KEY` per environment, kept in `.env.keys` and used by the whole team | Each team member has their own age key pair; the file is encrypted to every recipient's public key |
+| Revoking one person's access | N/A | Rotate `DOTENV_PRIVATE_KEY` and re-encrypt — affects everyone, since the whole team shared that key | Remove their public key from `.sops.yaml` and run `sops updatekeys` — no shared secret to rotate |
+| Safe to commit to git | ❌ Secrets sit in plain text in the repo and its history | ✅ Values are ciphertext; only the public key is committed | ✅ Values are ciphertext; only public keys are committed |
+| Supported file formats | `.env` only | `.env` only | YAML, JSON, `.env`, INI, and binary |
+| Needs an external/hosted service | No | No — self-hosted (a paid vault add-on exists but isn't required) | No — fully open-source and self-hosted |
+
+This is what makes SOPS + age a more secure fit for sharing secrets across a team: everyone keeps their own key, and removing someone's access never means rotating a secret the whole team relies on.
+
+<sub>Sources: [dotenvx encryption docs](https://dotenvx.com/docs/learn/encrypting/introduction), [dotenvx private keys docs](https://dotenvx.com/docs/learn/encrypting/private-keys), [dotenv-vault repo](https://github.com/dotenv-org/dotenv-vault), [SOPS age docs](https://getsops.io/docs/usage/identities/age/).</sub>
+
 ## Requirements
 
 - Install [SOPS](https://github.com/getsops/sops)
