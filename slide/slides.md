@@ -133,7 +133,7 @@ layout: default
 
 <h2>Encrypt to <code>.enc.env</code>, decrypt to stdout, edit transparently</h2>
 
-```bash {1-3|5-12|14-15}
+```bash {1-3|4|5-11|12-15}
 ## cat .env
 JWT_SECRET=some-secret-value
 
@@ -270,6 +270,36 @@ layout: default
 
 # Step 3 · Encrypt with the key
 
+<p>Pass the key explicitly, or via <code>SOPS_AGE_RECIPIENTS</code> — either way,
+<code>sops encrypt</code> prints the ciphertext to stdout by default. Nothing is
+written to disk yet:</p>
+
+```bash
+sops encrypt \
+  --age age1xxxxxxxxxxxxxxxxxxxxxxxx \
+  --input-type dotenv \
+  --output-type dotenv \
+  .env
+
+## prints to stdout — .env on disk is untouched
+JWT_SECRET=ENC[AES256_GCM,data:+ZdkX501aUvs936Q...,type:str]
+```
+
+<div class="g-callout info" style="margin-top: 1rem;">
+  <p>FYI: <code>--in-place</code> re-encrypts <code>.env</code> itself instead of
+  printing to stdout. We won't use it here — the next slide redirects the
+  output into a separate <code>.enc.env</code> file instead, so the plaintext
+  and the ciphertext are never the same file.</p>
+</div>
+
+---
+layout: default
+---
+
+# Step 3 · Save the encrypted copy
+
+<p>Redirect stdout into <code>.enc.env</code> to keep it:</p>
+
 <div class="g-grid-2">
   <div>
     <h3>Pass the key explicitly</h3>
@@ -279,7 +309,7 @@ sops encrypt \
   --age age1xxxxxxxxxxxxxxxxxxxxxxxx \
   --input-type dotenv \
   --output-type dotenv \
-  .env
+  .env > .enc.env
 ```
   </div>
   <div>
@@ -292,13 +322,14 @@ export SOPS_AGE_RECIPIENTS=\
 sops encrypt \
   --input-type dotenv \
   --output-type dotenv \
-  .env
+  .env > .enc.env
 ```
   </div>
 </div>
 
-<div class="g-callout info" style="margin-top: 1rem;">
-  <p>Add <code>--in-place</code> to overwrite <code>.env</code> directly instead of printing to stdout.</p>
+<div class="g-callout success" style="margin-top: 1rem;">
+  <p><code>.env</code> stays exactly as it was; <code>.enc.env</code> is the new
+  encrypted file — this is the one you'll commit.</p>
 </div>
 
 ---
@@ -306,6 +337,8 @@ layout: default
 ---
 
 # Step 3 · The encrypted result
+
+<p>Peek inside <code>.enc.env</code>:</p>
 
 ```bash {1|2-3|4-5}
 JWT_SECRET=ENC[AES256_GCM,data:+ZdkX501aUvs936Q...,type:str]
@@ -397,7 +430,8 @@ variable is prefixed <code>SOPS_AGE_</code>:</p>
 ```bash
 export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
 
-sops decrypt --input-type dotenv --output-type dotenv .env
+## .enc.env still ends in .env, so the format is auto-detected
+sops decrypt .enc.env
 ```
 
 ---
@@ -406,14 +440,11 @@ layout: default
 
 # Step 5 · `sops edit` as an editor
 
-<p>Once <code>SOPS_AGE_KEY_FILE</code> is exported, edit the encrypted secret directly —
-no manual decrypt/re-encrypt cycle.</p>
+<p>Once <code>SOPS_AGE_KEY_FILE</code> is exported, edit <code>.enc.env</code>
+directly — no manual decrypt/re-encrypt cycle.</p>
 
 ```bash
-sops edit \
-  --input-type dotenv \
-  --output-type dotenv \
-  .env
+sops edit .enc.env
 ```
 
 <div class="g-callout success" style="margin-top: 1.2rem;">
@@ -443,7 +474,7 @@ don't need to be secret. Use <code>--unencrypted-regex</code> to leave matching 
 ```bash
 sops encrypt --input-type dotenv --output-type dotenv \
   --unencrypted-regex '^(LOG_LEVEL|SERVER_PORT|DEMO_USER)$' \
-  .env
+  .env > .enc.env
 ```
 
 ---
@@ -451,6 +482,8 @@ layout: default
 ---
 
 # Step 6 · The result
+
+<p><code>.enc.env</code> now looks like this:</p>
 
 ```bash {1-3|4-7}
 LOG_LEVEL=DEBUG
@@ -482,13 +515,14 @@ creation_rules:
     unencrypted_regex: "^(LOG_LEVEL|SERVER_PORT|DEMO_USER)$"
 ```
 
-<p style="margin-top: 1rem;">Add a <code>path_regex</code> to target specific files, so running
-<code>sops</code> against a matching file edits its encrypted content directly:</p>
+<p style="margin-top: 1rem;">Add a <code>path_regex</code> scoped to <code>.enc.env</code>, so running
+<code>sops</code> against that file edits its encrypted content directly, and a
+stray plain <code>.env</code> is never accidentally matched:</p>
 
 ```yaml
 # .sops.yaml
 creation_rules:
-  - path_regex: \.env$
+  - path_regex: \.enc\.env$
     age: age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     unencrypted_regex: "^(LOG_LEVEL|SERVER_PORT|DEMO_USER)$"
 ```
@@ -524,7 +558,7 @@ saves you from guessing whose key <code>age1xxx...</code> is when you're reading
   <div class="g-step">2</div>
   <div class="g-step-body">
     <h3>Re-key the file</h3>
-    <p><code>sops updatekeys .env</code> re-encrypts the data key for the new recipient.</p>
+    <p><code>sops updatekeys .enc.env</code> re-encrypts the data key for the new recipient.</p>
   </div>
 </div>
 
@@ -539,24 +573,24 @@ layout: default
 # Step 9 · Migrating an existing `.env`
 
 <p>You already have a plain-text <code>.env</code>, a <code>.sops.yaml</code>, and your age key configured.
-Add a <code>path_regex</code>, then encrypt in place whenever you're ready:</p>
+Add a <code>path_regex</code>, then create <code>.enc.env</code> whenever you're ready:</p>
 
 ```yaml
 # .sops.yaml
 creation_rules:
-  - path_regex: \.env$
+  - path_regex: \.enc\.env$
     age: age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     unencrypted_regex: "^(LOG_LEVEL|SERVER_PORT|DEMO_USER)$"
 ```
 
 ```bash
-sops encrypt --in-place .env
+sops encrypt .env > .enc.env
 ```
 
 <div class="g-callout" style="margin-top: 1rem;">
-  <p>⚠️ SOPS auto-detects the dotenv format from a filename ending in <code>.env</code>.
-  Renaming it (e.g. <code>.env.production</code>) means adding
-  <code>--input-type dotenv --output-type dotenv</code> explicitly.</p>
+  <p>⚠️ SOPS auto-detects the dotenv format from a filename ending in <code>.env</code> —
+  <code>.enc.env</code> still qualifies. A different suffix (e.g. <code>.env.production</code>)
+  needs <code>--input-type dotenv --output-type dotenv</code> explicitly.</p>
 </div>
 
 ---
@@ -571,13 +605,13 @@ a developer's key only unlocks what they're meant to access.</p>
 ```yaml
 # .sops.yaml
 creation_rules:
-  - path_regex: dev\.env$
+  - path_regex: dev\.enc\.env$
     age:
       - age1devxxxx...  # alice
       - age1devyyyy...  # bob
     unencrypted_regex: "^(LOG_LEVEL|SERVER_PORT)$"
 
-  - path_regex: prod\.env$
+  - path_regex: prod\.enc\.env$
     age:
       - age1opsxxxx...  # carol
       - age1opsyyyy...  # dave
@@ -592,11 +626,11 @@ layout: default
 
 <div class="g-grid-2" style="margin-top: 1rem;">
   <div class="g-card accent-green">
-    <h3>dev.env</h3>
+    <h3>dev.enc.env</h3>
     <p>Encrypted to alice and bob (the dev team's public keys).</p>
   </div>
   <div class="g-card accent-red">
-    <h3>prod.env</h3>
+    <h3>prod.enc.env</h3>
     <p>Encrypted to carol and dave (the ops/production team's public keys).</p>
   </div>
 </div>
@@ -615,10 +649,10 @@ layout: default
 ```bash
 export SOPS_AGE_KEY_FILE=~/.config/sops/age/dev-keys.txt
 
-sops decrypt dev.env
+sops decrypt dev.enc.env
 ## DB_PASSWORD=dev-secret
 
-sops decrypt prod.env
+sops decrypt prod.enc.env
 ## Failed to get the data key required to decrypt the SOPS file.
 ## Group 0: FAILED
 ##   age1opsxxxx...: FAILED
@@ -641,11 +675,11 @@ values; each recipient's <code>age</code> key only wraps a copy of it.
 <code>rotate</code> replaces that data key without changing who can decrypt.</p>
 
 ```bash
-sops rotate --in-place .env
+sops rotate --in-place .enc.env
 ```
 
 <div class="g-callout info" style="margin-top: 1rem;">
-  <p>The file stays named <code>.env</code> and keeps the same recipients —
+  <p>The file stays named <code>.enc.env</code> and keeps the same recipients —
   only the data key underneath, and the ciphertext it produced, is new.</p>
 </div>
 
