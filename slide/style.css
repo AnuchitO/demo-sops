@@ -1,0 +1,642 @@
+/* ==========================================================================
+   Clean, minimal card-based design system for the SOPS + age deck
+   Light/dark tokens live on :root and html.dark — see the bottom of this
+   file for the dark-mode overrides picked up by Slidev's built-in toggle.
+   ========================================================================== */
+
+:root {
+  --g-blue: #1a73e8;
+  --g-red: #ea4335;
+  --g-yellow: #fbbc04;
+  --g-green: #34a853;
+  --g-bg: #ffffff;
+  --g-card: #f8f9fa;
+  --g-border: #e8eaed;
+  --g-text: #202124;
+  --g-text-secondary: #5f6368;
+  --g-code-bg: #1e1e1e;
+  --g-callout-yellow-bg: #fef7e0;
+  --g-callout-red-bg: #fce8e6;
+  --g-callout-blue-bg: #e8f0fe;
+  --g-callout-green-bg: #e6f4ea;
+  --g-logo-filter: none;
+}
+
+html,
+body {
+  background: var(--g-bg);
+}
+
+.slidev-layout {
+  position: relative;
+  background: var(--g-bg);
+  color: var(--g-text);
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  padding: 3rem 4.2rem;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.slidev-layout h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--g-text);
+  letter-spacing: -0.02em;
+  margin: 0 0 0.35rem 0;
+  line-height: 1.15;
+}
+
+.slidev-layout h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--g-text-secondary);
+  margin: 0 0 1.1rem 0;
+}
+
+.slidev-layout h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--g-text);
+  margin: 0 0 0.5rem 0;
+}
+
+.slidev-layout p,
+.slidev-layout li {
+  color: var(--g-text);
+  line-height: 1.55;
+  font-size: 1rem;
+}
+
+.slidev-layout strong {
+  color: var(--g-blue);
+  font-weight: 700;
+}
+
+.slidev-layout a {
+  color: var(--g-blue);
+}
+
+/* ---------------- code blocks ---------------- */
+
+.slidev-layout pre {
+  background: var(--g-code-bg) !important;
+  border-radius: 12px !important;
+  padding: 1rem 1.25rem !important;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.14);
+  font-size: 0.78rem !important;
+  line-height: 1.5 !important;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.slidev-layout pre code {
+  font-family: 'Fira Code', 'JetBrains Mono', ui-monospace, monospace !important;
+  white-space: pre;
+}
+
+.slidev-layout code:not(pre code) {
+  background: var(--g-card);
+  border: 1px solid var(--g-border);
+  border-radius: 4px;
+  padding: 0.1em 0.4em;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.85em;
+  color: var(--g-red);
+}
+
+/* Inline code inside a heading inherits the heading's huge font-size, which
+   turns the padded/bordered "chip" above into an oversized pill that crowds
+   the line below it. Drop the chip styling there and just color the text. */
+.slidev-layout h1 code,
+.slidev-layout h2 code,
+.slidev-layout h3 code {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  font-size: 0.85em !important;
+  color: var(--g-blue) !important;
+}
+
+/* ---------------- decorative accent rule ---------------- */
+
+.g-dots {
+  width: 56px;
+  height: 5px;
+  border-radius: 999px;
+  margin-bottom: 1.4rem;
+  background: linear-gradient(90deg, var(--g-blue), var(--g-green));
+}
+
+/* ---------------- layout helpers ---------------- */
+
+.g-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+.g-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.g-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+
+/* ---------------- cards ---------------- */
+
+.g-card {
+  background: var(--g-card);
+  border: 1px solid var(--g-border);
+  border-radius: 14px;
+  padding: 1.3rem 1.4rem;
+  box-sizing: border-box;
+}
+
+.g-card h3 { margin-top: 0; }
+.g-card p, .g-card li { font-size: 0.9rem; color: var(--g-text-secondary); }
+.g-card code { white-space: nowrap; }
+
+/* tighter variant for grids with four content-heavy cards stacked two rows deep */
+.g-card.compact { padding: 0.9rem 1.2rem; }
+.g-card.compact h3 { font-size: 1rem; margin-bottom: 0.3rem; }
+.g-card.compact p { font-size: 0.85rem; line-height: 1.4; }
+
+.g-card.accent-blue { border-top: 4px solid var(--g-blue); }
+.g-card.accent-red { border-top: 4px solid var(--g-red); }
+.g-card.accent-yellow { border-top: 4px solid var(--g-yellow); }
+.g-card.accent-green { border-top: 4px solid var(--g-green); }
+
+/* ---------------- callouts ---------------- */
+
+.g-callout {
+  border-left: 4px solid var(--g-yellow);
+  background: var(--g-callout-yellow-bg);
+  border-radius: 8px;
+  padding: 0.85rem 1.1rem;
+  font-size: 0.88rem;
+  color: var(--g-text);
+  box-sizing: border-box;
+}
+
+.g-callout.danger { border-left-color: var(--g-red); background: var(--g-callout-red-bg); }
+.g-callout.info { border-left-color: var(--g-blue); background: var(--g-callout-blue-bg); }
+.g-callout.success { border-left-color: var(--g-green); background: var(--g-callout-green-bg); }
+.g-callout p { margin: 0; font-size: 0.88rem; }
+
+/* ---------------- step badges ---------------- */
+
+.g-step-row { display: flex; align-items: flex-start; gap: 0.9rem; margin-bottom: 0.9rem; }
+.g-step-row:last-child { margin-bottom: 0; }
+
+.g-step {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--g-blue);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.g-step-row .g-step-body h3 { margin-bottom: 0.15rem; }
+.g-step-row .g-step-body p { margin: 0; font-size: 0.88rem; color: var(--g-text-secondary); }
+
+/* ---------------- tables ---------------- */
+
+.g-table { width: 100%; overflow-x: auto; }
+.g-table table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.g-table th {
+  background: var(--g-card);
+  color: var(--g-text);
+  text-align: left;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 2px solid var(--g-border);
+  font-weight: 700;
+}
+.g-table td {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--g-border);
+  vertical-align: top;
+  color: var(--g-text-secondary);
+}
+.g-table td:first-child, .g-table th:first-child { color: var(--g-text); font-weight: 500; }
+.g-table td code, .g-table th code { font-size: 0.78em; }
+
+/* comparison table specific accents */
+.g-compare th.col-sops { color: var(--g-blue); }
+.g-compare td.win { color: var(--g-green); font-weight: 600; }
+.g-compare td.lose { color: var(--g-red); }
+
+/* ---------------- cover / section slides ---------------- */
+
+.g-cover {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.g-eyebrow {
+  color: var(--g-text-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.g-cover h1 { font-size: 3.1rem; max-width: 40rem; }
+
+.g-sub {
+  font-size: 1.2rem;
+  color: var(--g-text-secondary);
+  font-weight: 400;
+  max-width: 34rem;
+  margin-top: 0.6rem;
+}
+
+.g-brand {
+  position: absolute;
+  top: 3rem;
+  right: 4.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.g-brand span {
+  font-size: 0.85rem;
+  color: var(--g-text-secondary);
+  font-weight: 500;
+}
+
+.g-brand img {
+  height: 34px;
+  width: auto;
+  display: block;
+  filter: var(--g-logo-filter);
+}
+
+.g-section {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.g-section .g-eyebrow { margin-bottom: 0.6rem; }
+.g-section h1 { font-size: 2.8rem; }
+
+/* ---------------- misc ---------------- */
+
+.g-badge {
+  display: inline-block;
+  background: var(--g-card);
+  border: 1px solid var(--g-border);
+  border-radius: 999px;
+  padding: 0.15rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--g-text-secondary);
+  margin-right: 0.4rem;
+}
+
+.g-list-clean { list-style: none; padding: 0; margin: 0; }
+.g-list-clean li { padding-left: 1.5rem; position: relative; margin-bottom: 0.5rem; }
+.g-list-clean li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--g-blue);
+}
+
+.g-footer {
+  position: absolute;
+  bottom: 1.4rem;
+  left: 4.2rem;
+  right: 4.2rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--g-text-secondary);
+}
+
+/* ==========================================================================
+   Deep dive diagrams — hand-built, animated replacements for the plain
+   mermaid charts. Two pieces:
+   .dk-diagram  "envelope encryption" fan (master keys <-> DATA_KEY <-> secrets)
+   .dp-diagram  "decrypt pipeline" strip (sops decrypt -> metadata -> identity -> plaintext)
+   Both animate once on entrance and keep a subtle continuous motion (a
+   pulsing DATA_KEY, flowing dashes along the connectors) so the mechanism
+   reads as *movement* rather than a static box-and-arrow chart.
+   ========================================================================== */
+
+/* ---------------- envelope encryption fan ---------------- */
+
+.dk-diagram {
+  position: relative;
+  width: 100%;
+  height: 215px;
+  margin-top: 0.6rem;
+}
+
+.dk-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+.dk-path {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0;
+  animation: dk-fade-in 0.5s ease forwards, dk-flow 1.4s linear infinite;
+}
+
+.dk-path-wrap { stroke: var(--g-blue); stroke-dasharray: 6 7; animation-delay: 0.1s, 0.7s; }
+.dk-path-enc { stroke: var(--g-green); stroke-dasharray: 6 7; animation-delay: 0.9s, 1.5s; }
+
+.dk-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: var(--g-card);
+  border: 1px solid var(--g-border);
+  border-radius: 10px;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: var(--g-text);
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  opacity: 0;
+  animation: dk-fade-in 0.5s ease forwards;
+}
+
+.dk-col-left .dk-node { border-left: 3px solid var(--g-blue); }
+.dk-col-right .dk-node { border-left: 3px solid var(--g-green); }
+
+.dk-col-left .dk-node:nth-child(1) { animation-delay: 0.05s; }
+.dk-col-left .dk-node:nth-child(2) { animation-delay: 0.2s; }
+.dk-col-left .dk-node:nth-child(3) { animation-delay: 0.35s; }
+.dk-col-right .dk-node:nth-child(1) { animation-delay: 0.85s; }
+.dk-col-right .dk-node:nth-child(2) { animation-delay: 1.0s; }
+.dk-col-right .dk-node:nth-child(3) { animation-delay: 1.15s; }
+
+.dk-datakey {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 148px;
+  height: 92px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--g-blue), var(--g-green));
+  color: #fff;
+  text-align: center;
+  opacity: 0;
+  animation: dk-scale-in 0.5s ease forwards, dk-pulse 2.2s ease-in-out infinite;
+  animation-delay: 0.45s, 0.95s;
+}
+
+.dk-datakey-label { font-weight: 700; font-size: 0.95rem; letter-spacing: 0.02em; }
+.dk-datakey-sub { font-size: 0.65rem; opacity: 0.85; margin-top: 0.15rem; }
+
+.dk-tag {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  background: var(--g-bg);
+  border: 1px solid var(--g-border);
+  opacity: 0;
+  animation: dk-fade-in 0.5s ease forwards;
+}
+
+.dk-tag-wrap { left: 30%; color: var(--g-blue); animation-delay: 0.5s; }
+.dk-tag-enc { left: 70%; color: var(--g-green); animation-delay: 1.3s; }
+
+@keyframes dk-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dk-scale-in { from { opacity: 0; transform: translate(-50%, -50%) scale(0.7); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+@keyframes dk-flow { to { stroke-dashoffset: -26; } }
+@keyframes dk-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(26, 115, 232, 0.35); }
+  50% { box-shadow: 0 0 0 16px rgba(26, 115, 232, 0); }
+}
+
+/* ---------------- decrypt pipeline strip ---------------- */
+
+.dp-diagram {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.3rem;
+  margin-top: 1.6rem;
+}
+
+.dp-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 110px;
+  text-align: center;
+  opacity: 0;
+  animation: dp-in 0.5s ease forwards;
+}
+
+.dp-step:nth-of-type(1) { animation-delay: 0.05s; }
+.dp-step:nth-of-type(3) { animation-delay: 0.55s; }
+.dp-step:nth-of-type(5) { animation-delay: 1.05s; }
+.dp-step:nth-of-type(7) { animation-delay: 1.55s; }
+.dp-step:nth-of-type(9) { animation-delay: 2.05s; }
+
+.dp-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: var(--g-card);
+  border: 2px solid var(--g-border);
+  margin-bottom: 0.55rem;
+}
+
+.dp-icon-blue { border-color: var(--g-blue); background: var(--g-callout-blue-bg); }
+.dp-icon-yellow { border-color: var(--g-yellow); background: var(--g-callout-yellow-bg); }
+.dp-icon-green { border-color: var(--g-green); background: var(--g-callout-green-bg); }
+.dp-icon-red { border-color: var(--g-red); background: var(--g-callout-red-bg); }
+.dp-icon-success {
+  border-color: var(--g-green);
+  background: var(--g-callout-green-bg);
+  animation: dk-pulse 2.2s ease-in-out infinite;
+  animation-delay: 1.9s;
+}
+
+.dp-label { font-size: 0.82rem; font-weight: 700; color: var(--g-text); }
+.dp-sub { font-size: 0.68rem; color: var(--g-text-secondary); margin-top: 0.2rem; line-height: 1.35; }
+
+.dp-connector {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 27px;
+  min-width: 30px;
+  opacity: 0;
+  animation: dp-in 0.5s ease forwards;
+}
+
+.dp-connector:nth-of-type(2) { animation-delay: 0.3s; }
+.dp-connector:nth-of-type(4) { animation-delay: 0.8s; }
+.dp-connector:nth-of-type(6) { animation-delay: 1.3s; }
+.dp-connector:nth-of-type(8) { animation-delay: 1.8s; }
+
+/* compact variant — for strips with 5+ steps (e.g. a fallback chain of
+   several env vars), where node labels are longer/more numerous and need
+   to shrink to keep the whole strip on one row */
+.dp-diagram.dp-compact .dp-step { min-width: 84px; }
+.dp-diagram.dp-compact .dp-icon { width: 42px; height: 42px; font-size: 1.05rem; margin-bottom: 0.4rem; }
+.dp-diagram.dp-compact .dp-label { font-size: 0.68rem; line-height: 1.3; }
+.dp-diagram.dp-compact .dp-label code {
+  font-size: 0.6rem;
+  padding: 0.05em 0.35em;
+  white-space: normal;
+  word-break: break-word;
+}
+.dp-diagram.dp-compact .dp-sub { font-size: 0.6rem; margin-top: 0.2rem; }
+.dp-diagram.dp-compact .dp-connector { margin-top: 21px; }
+.dp-diagram.dp-compact .dp-connector-chip { font-size: 0.56rem; padding: 0.08rem 0.45rem; }
+
+.dp-connector-line {
+  width: 100%;
+  height: 3px;
+  border-radius: 2px;
+  background-image: repeating-linear-gradient(90deg, var(--g-blue) 0 10px, transparent 10px 20px);
+  background-size: 200% 100%;
+  animation: dp-flow 1s linear infinite;
+}
+
+.dp-connector-chip {
+  margin-top: 0.4rem;
+  font-size: 0.62rem;
+  font-family: 'Fira Code', monospace;
+  color: var(--g-text-secondary);
+  background: var(--g-card);
+  border: 1px solid var(--g-border);
+  border-radius: 999px;
+  padding: 0.1rem 0.55rem;
+  white-space: nowrap;
+}
+
+@keyframes dp-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes dp-flow { to { background-position: -40px 0; } }
+
+/* ---------------- grouped priority ladder ----------------
+   For "try A, else B, else C" fallback lists that fall into a couple of
+   meaningful categories (e.g. Step 4's SOPS_AGE_* lookup order: provide the
+   key directly, or reuse an SSH key). Each category is its own short
+   .dp-diagram row — so labels get full-width room instead of being
+   squeezed — joined top-to-bottom by a .dl-elbow connector, reusing the
+   same flowing-dash language as .dp-connector-line but oriented as the
+   "still not set, fall through to the next category" link. */
+
+.dl-group-label {
+  display: flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--g-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.4rem;
+  opacity: 0;
+  animation: dp-in 0.4s ease forwards;
+}
+
+.dl-group-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: var(--g-blue);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  margin-right: 0.45rem;
+  flex-shrink: 0;
+}
+
+.dl-narrow { max-width: 66%; margin: 0 auto; }
+
+.dl-elbow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.5rem 0 0.9rem;
+  opacity: 0;
+  animation: dp-in 0.5s ease forwards;
+  animation-delay: 0.85s;
+}
+
+.dl-elbow-line {
+  flex: 1;
+  height: 2px;
+  background-image: repeating-linear-gradient(90deg, var(--g-yellow) 0 8px, transparent 8px 16px);
+  background-size: 200% 100%;
+  animation: dp-flow 0.8s linear infinite;
+}
+
+.dl-elbow-label {
+  font-size: 0.68rem;
+  color: var(--g-text-secondary);
+  white-space: nowrap;
+  background: var(--g-card);
+  border: 1px solid var(--g-border);
+  border-radius: 999px;
+  padding: 0.15rem 0.65rem;
+}
+
+/* ==========================================================================
+   Dark mode — Slidev toggles the `dark` class on <html> when colorSchema is
+   "auto" and the reader flips the sun/moon icon in the bottom toolbar.
+   ========================================================================== */
+
+html.dark {
+  --g-blue: #8ab4f8;
+  --g-red: #f28b82;
+  --g-yellow: #fdd663;
+  --g-green: #81c995;
+  --g-bg: #1b1c1f;
+  --g-card: #28292c;
+  --g-border: #3c4043;
+  --g-text: #e8eaed;
+  --g-text-secondary: #9aa0a6;
+  --g-code-bg: #131316;
+  --g-callout-yellow-bg: rgba(253, 214, 99, 0.12);
+  --g-callout-red-bg: rgba(242, 139, 130, 0.14);
+  --g-callout-blue-bg: rgba(138, 180, 248, 0.14);
+  --g-callout-green-bg: rgba(129, 201, 149, 0.14);
+  /* the logo is black artwork on a transparent background — invert it so it
+     reads as white ink on dark slides instead of disappearing */
+  --g-logo-filter: invert(1);
+}
+
+html.dark .slidev-layout pre {
+  border: 1px solid var(--g-border);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
+}
+
+html.dark .g-card,
+html.dark .g-step-row,
+html.dark .g-callout,
+html.dark .dk-node {
+  box-shadow: none;
+}
