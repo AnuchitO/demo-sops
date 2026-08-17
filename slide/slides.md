@@ -291,18 +291,51 @@ layout: default
 
 <h2>Tell SOPS which private key to use</h2>
 
-SOPS checks these locations, in order:
+SOPS checks these locations, in order — the first one that's set wins.
+Every variable below is prefixed <code>SOPS_AGE_</code>:
 
-<div class="g-table" style="margin-top: 0.8rem;">
-
-| Variable | What it contains |
-|---|---|
-| `SOPS_AGE_KEY_FILE` | Path to a file containing age private key(s) |
-| `SOPS_AGE_KEY` | The actual age private key text |
-| `SOPS_AGE_KEY_CMD` | Command whose stdout contains the private key |
-| `SOPS_AGE_SSH_PRIVATE_KEY_FILE` | Path to an SSH private key SOPS can use as an age identity |
-| `SOPS_AGE_SSH_PRIVATE_KEY_CMD` | Command whose stdout provides the SSH private key |
-
+<div class="dp-diagram dp-compact">
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-blue">📁</div>
+    <div class="dp-label"><code>KEY_FILE</code></div>
+    <div class="dp-sub">path to a keys file</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">not set?</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-yellow">🔑</div>
+    <div class="dp-label"><code>KEY</code></div>
+    <div class="dp-sub">the private key text</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">not set?</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-green">⚙️</div>
+    <div class="dp-label"><code>KEY_CMD</code></div>
+    <div class="dp-sub">command outputs the key</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">not set?</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-blue">🗝️</div>
+    <div class="dp-label"><code>SSH_PRIVATE_<br/>KEY_FILE</code></div>
+    <div class="dp-sub">an SSH key file to reuse</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">not set?</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-success">🗝️</div>
+    <div class="dp-label"><code>SSH_PRIVATE_<br/>KEY_CMD</code></div>
+    <div class="dp-sub">command outputs an SSH key</div>
+  </div>
 </div>
 
 ```bash
@@ -782,30 +815,38 @@ layout: default
 <code>.sops.yaml</code> alone isn't enough — <strong>they may already have
 extracted the old data key</strong> while they still had access.</p>
 
-<div class="g-step-row">
-  <div class="g-step">1</div>
-  <div class="g-step-body">
-    <h3>Remove the recipient, then <code>sops updatekeys</code></h3>
-    <p>The file's metadata no longer wraps the data key for them — but if
-    they already extracted it, this step alone doesn't revoke that copy.</p>
+<div class="dp-diagram">
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-red">🚨</div>
+    <div class="dp-label">Recipient compromised</div>
+    <div class="dp-sub">may already hold the old DATA_KEY</div>
   </div>
-</div>
-
-<div class="g-step-row">
-  <div class="g-step">2</div>
-  <div class="g-step-body">
-    <h3><code>sops rotate --in-place file</code></h3>
-    <p>Generates a brand-new data key and re-encrypts every value with it.
-    Whatever data key the removed recipient had is now useless.</p>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">not enough alone</span>
   </div>
-</div>
-
-<div class="g-step-row">
-  <div class="g-step">3</div>
-  <div class="g-step-body">
-    <h3>Rotate the actual credentials</h3>
-    <p>If they had valid access, assume they also read the plaintext values —
-    rotate the real passwords/API keys, not just the SOPS encryption.</p>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-blue">🔒</div>
+    <div class="dp-label"><code>updatekeys</code></div>
+    <div class="dp-sub">removes them from .sops.yaml metadata</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">new key</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-yellow">🔄</div>
+    <div class="dp-label"><code>sops rotate</code></div>
+    <div class="dp-sub">the old DATA_KEY is now useless</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">assume leaked</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-success">✅</div>
+    <div class="dp-label">Rotate credentials</div>
+    <div class="dp-sub">the real passwords/API keys, not just SOPS</div>
   </div>
 </div>
 
