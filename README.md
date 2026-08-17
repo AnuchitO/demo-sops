@@ -506,3 +506,72 @@ Because encryption happens leaf-by-leaf instead of on the whole file:
 - **Tampering is detected**, not just hidden — the MAC over the tree means a hand-edited key or value breaks decryption instead of silently succeeding.
 
 If you use a format SOPS doesn't recognize as a tree (e.g. plain binary or an unrecognized extension), SOPS falls back to encrypting the entire file as one blob — you lose all of the above; `sops decrypt` (or `--output-type binary`) is then all-or-nothing.
+
+## Using the encrypted `.env` with docker-compose and other CLI tools
+
+Docker, `docker-compose`, and most other CLIs have no idea what SOPS is — they just read whatever bytes are in the file you point them at. That's the trap: pointing one of these tools straight at your encrypted `.env` doesn't fail, it just quietly hands the container `ENC[...]` ciphertext as the literal value.
+
+### The pitfall: pointing a tool straight at the encrypted file
+
+Take the `.env` from the ["Challenge" section above](#challenge-some-keys-in-env-dont-need-to-be-encrypted), already encrypted, and a minimal `docker-compose.yml` that passes a couple of its keys into a container:
+
+```yaml
+## cat docker-compose.yml
+services:
+  app:
+    image: alpine:3.20
+    command: ["sh", "-c", "echo DATABASE_URL=$DATABASE_URL JWT_SECRET=$JWT_SECRET"]
+    environment:
+      - DATABASE_URL
+      - JWT_SECRET
+```
+
+```bash
+docker compose --env-file .env run --rm app
+
+## output
+DATABASE_URL=ENC[AES256_GCM,data:peUXSKCZAINqF9Hg61YPkc2iqwnhlKP3M9Dl9iaU36STo/tC+cmiCA29WVX4zD3rPqhZGy9NPlzBqIxG,iv:IQ9pjZwPvqwW1wPYdihwq/uSLypMqirvMlpc554g3TA=,tag:BSHPueljUYaE/sIx8J7MXw==,type:str] JWT_SECRET=ENC[AES256_GCM,data:Zb6BKAEngeHT+EbiVd7/1wEi6Pc3TAlcjQclDIq02zUjQZY8XDcLyS1G8HoCoesNZrW1qRraznywDCzLE7HC,iv:fmHNGUFRn9sOpaVvnenXeVgH/pmIHiVXB7TjbGwTwcg=,tag:YFMRqcXaZWag0QMaS5mrMQ==,type:str]
+```
+
+No error, no warning — the app just received two useless strings instead of a database URL and a secret. This is why you never `env_file: .env` / `--env-file .env` a SOPS-encrypted file directly; you always decrypt it into the command first.
+
+### Fix 1: `sops exec-env` — decrypt straight into a process's environment, nothing touches disk
+
+`sops exec-env <file> '<command>'` decrypts `<file>` in memory, exports every key as an environment variable, runs `<command>` with that environment, and discards the plaintext the moment the command exits. No decrypted file is ever written.
+
+```bash
+sops exec-env .env 'docker compose run --rm app'
+
+## output
+DATABASE_URL=postgres://user:password@localhost:5432/mydb?sslmode=require JWT_SECRET=7f3c9a2e1d8b4f6a9c0e7d2b5a1f8c3e6d9b4a7f2c5e8d1a6b9c3f0e7d4a2b8
+```
+
+This works for `docker compose`'s `environment:` passthrough (shown above) because compose picks up bare `- VAR` names from whatever process environment it was launched in — `sops exec-env` is that process. It also works for any other command that just reads env vars, with no Docker involved at all:
+
+```bash
+sops exec-env .env 'go run ./cmd/server'
+sops exec-env .env 'npm run start'
+sops exec-env .env 'psql "$DATABASE_URL" -c "select 1"'
+```
+
+### Fix 2: `sops exec-file` — when a tool insists on a real file path
+
+Some flags only accept a path — `docker compose --env-file <path>` is one, since that flag is used to populate the values compose substitutes into the compose file itself, not just the container's environment. `sops exec-file <file> '<command with {} for the path>'` decrypts to a real temporary file, substitutes its path wherever `{}` appears in `<command>`, runs it, then deletes the file when the command exits.
+
+```bash
+sops exec-file --no-fifo --input-type dotenv --output-type dotenv --filename decrypted.env .env \
+  'docker compose --env-file {} run --rm app'
+
+## output
+DATABASE_URL=postgres://user:password@localhost:5432/mydb?sslmode=require JWT_SECRET=7f3c9a2e1d8b4f6a9c0e7d2b5a1f8c3e6d9b4a7f2c5e8d1a6b9c3f0e7d4a2b8
+```
+
+> `--no-fifo` matters here: by default `exec-file` hands the command a named pipe instead of a regular file, which is fine for a tool that reads the contents once (like `cat {}`) but hangs a tool that opens the file more than once — which `docker compose` does. `--no-fifo` writes an actual temp file instead, deleted automatically once the command returns.
+
+`--input-type`/`--output-type` are only needed here because `decrypted.env` (the `--filename`) doesn't end in `.env`, so SOPS can't infer the format from that name the same way it does from `.env` itself — the same rule from the ["How SOPS handles file formats"](#how-sops-handles-file-formats) section above.
+
+### Which one to reach for
+
+- **`sops exec-env`** — the default choice. Use it whenever the tool just needs environment variables: `docker compose` (via `environment:` passthrough), a locally-run app, a migration script, `psql`/`redis-cli`, CI steps, anything.
+- **`sops exec-file`** — only when a tool's flag hard-requires an actual file path, like `docker compose --env-file`, and reading from the process environment isn't an option.
+- **Never**: `sops decrypt --in-place .env`, run your command, then `sops encrypt --in-place .env` again to "put it back." It works, but there's a real window where a fully decrypted `.env` sits on disk — a crash, a forgotten step, or a stray `git add .` before the final `encrypt` leaves plaintext secrets exposed. `exec-env`/`exec-file` never create that window.
