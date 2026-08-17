@@ -254,10 +254,12 @@ You can share the encrypted secret with a team member by adding their `age` publ
 ```.sops.yaml
 creation_rules:
   - age:
-        - age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-        - age1yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+        - age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  # alice
+        - age1yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy  # bob (new teammate)
     unencrypted_regex: "^(LOG_LEVEL|SERVER_PORT|DEMO_USER)$"
 ```
+
+A trailing `# name` comment is just a plain YAML comment — SOPS ignores it. It costs nothing to add but saves you from ever having to guess whose key `age1xxx...` was when you're reading `.sops.yaml` months later.
 
 2. Run `sops updatekeys .env` so SOPS updates the file's metadata with the new recipient:
 
@@ -313,20 +315,22 @@ Name each file so it still ends in `.env` (e.g. `dev.env`, `prod.env`) — that'
 ```.sops.yaml
 creation_rules:
   - path_regex: dev\.env$
-    age: >-
-      age1devxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,
-      age1devyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+    age:
+      - age1devxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  # alice
+      - age1devyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy  # bob
     unencrypted_regex: "^(LOG_LEVEL|SERVER_PORT)$"
 
   - path_regex: prod\.env$
-    age: >-
-      age1opsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,
-      age1opsyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+    age:
+      - age1opsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  # carol
+      - age1opsyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy  # dave
     unencrypted_regex: "^(LOG_LEVEL|SERVER_PORT)$"
 ```
 
-- `dev.env` is encrypted only to the dev team's public keys.
-- `prod.env` is encrypted only to the ops/production team's public keys.
+> Written as a YAML list (one key per line) instead of a single comma-joined string, so each recipient can carry its own `# name` comment. Both forms parse identically to SOPS — the list is just easier to annotate and review in a diff. Don't put a `#` comment inside the folded `>-`/`|` string form used elsewhere in this README; YAML treats it as literal text there, not a comment, and it would corrupt the recipient string.
+
+- `dev.env` is encrypted to alice and bob (the dev team's public keys).
+- `prod.env` is encrypted to carol and dave (the ops/production team's public keys).
 - SOPS checks `creation_rules` top to bottom and applies the first `path_regex` that matches — put more specific patterns first.
 
 > If you'd rather use the `.env.development` / `.env.production` naming convention, that works too — just remember SOPS won't auto-detect the format from those names, so add `--input-type dotenv --output-type dotenv` to every `encrypt`/`decrypt`/`edit` command, the same way as shown above.
