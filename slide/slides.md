@@ -289,12 +289,12 @@ layout: default
 
 # Step 4 · Decrypting a secret
 
-<h2>Tell SOPS which private key to use</h2>
+<p>SOPS checks these in order and stops at the first one that's set — every
+variable is prefixed <code>SOPS_AGE_</code>:</p>
 
-SOPS checks these locations, in order — the first one that's set wins.
-Every variable below is prefixed <code>SOPS_AGE_</code>:
+<div class="dl-group-label"><span class="dl-group-num">1</span> Provide the age key directly</div>
 
-<div class="dp-diagram dp-compact">
+<div class="dp-diagram">
   <div class="dp-step">
     <div class="dp-icon dp-icon-blue">📁</div>
     <div class="dp-label"><code>KEY_FILE</code></div>
@@ -318,22 +318,29 @@ Every variable below is prefixed <code>SOPS_AGE_</code>:
     <div class="dp-label"><code>KEY_CMD</code></div>
     <div class="dp-sub">command outputs the key</div>
   </div>
+</div>
+
+<div class="dl-elbow">
+  <span class="dl-elbow-line"></span>
+  <span class="dl-elbow-label">still not set → also try reusing an SSH key</span>
+  <span class="dl-elbow-line"></span>
+</div>
+
+<div class="dl-group-label"><span class="dl-group-num">2</span> …or reuse an existing SSH key</div>
+
+<div class="dp-diagram dl-narrow">
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-blue">📁</div>
+    <div class="dp-label"><code>SSH_PRIVATE_KEY_FILE</code></div>
+    <div class="dp-sub">an SSH private key file</div>
+  </div>
   <div class="dp-connector">
     <span class="dp-connector-line"></span>
     <span class="dp-connector-chip">not set?</span>
   </div>
   <div class="dp-step">
-    <div class="dp-icon dp-icon-blue">🗝️</div>
-    <div class="dp-label"><code>SSH_PRIVATE_<br/>KEY_FILE</code></div>
-    <div class="dp-sub">an SSH key file to reuse</div>
-  </div>
-  <div class="dp-connector">
-    <span class="dp-connector-line"></span>
-    <span class="dp-connector-chip">not set?</span>
-  </div>
-  <div class="dp-step">
-    <div class="dp-icon dp-icon-success">🗝️</div>
-    <div class="dp-label"><code>SSH_PRIVATE_<br/>KEY_CMD</code></div>
+    <div class="dp-icon dp-icon-green">⚙️</div>
+    <div class="dp-label"><code>SSH_PRIVATE_KEY_CMD</code></div>
     <div class="dp-sub">command outputs an SSH key</div>
   </div>
 </div>

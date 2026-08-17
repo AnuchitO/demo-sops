@@ -537,6 +537,73 @@ body {
 @keyframes dp-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes dp-flow { to { background-position: -40px 0; } }
 
+/* ---------------- grouped priority ladder ----------------
+   For "try A, else B, else C" fallback lists that fall into a couple of
+   meaningful categories (e.g. Step 4's SOPS_AGE_* lookup order: provide the
+   key directly, or reuse an SSH key). Each category is its own short
+   .dp-diagram row — so labels get full-width room instead of being
+   squeezed — joined top-to-bottom by a .dl-elbow connector, reusing the
+   same flowing-dash language as .dp-connector-line but oriented as the
+   "still not set, fall through to the next category" link. */
+
+.dl-group-label {
+  display: flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--g-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.4rem;
+  opacity: 0;
+  animation: dp-in 0.4s ease forwards;
+}
+
+.dl-group-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: var(--g-blue);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  margin-right: 0.45rem;
+  flex-shrink: 0;
+}
+
+.dl-narrow { max-width: 66%; margin: 0 auto; }
+
+.dl-elbow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.5rem 0 0.9rem;
+  opacity: 0;
+  animation: dp-in 0.5s ease forwards;
+  animation-delay: 0.85s;
+}
+
+.dl-elbow-line {
+  flex: 1;
+  height: 2px;
+  background-image: repeating-linear-gradient(90deg, var(--g-yellow) 0 8px, transparent 8px 16px);
+  background-size: 200% 100%;
+  animation: dp-flow 0.8s linear infinite;
+}
+
+.dl-elbow-label {
+  font-size: 0.68rem;
+  color: var(--g-text-secondary);
+  white-space: nowrap;
+  background: var(--g-card);
+  border: 1px solid var(--g-border);
+  border-radius: 999px;
+  padding: 0.15rem 0.65rem;
+}
+
 /* ==========================================================================
    Dark mode — Slidev toggles the `dark` class on <html> when colorSchema is
    "auto" and the reader flips the sun/moon icon in the bottom toolbar.
