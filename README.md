@@ -36,35 +36,63 @@ JWT_SECRET=some-secret-value
 
 export SOPS_AGE_RECIPIENTS="age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-## encrypt .env in place
+## encrypt .env into a new file, .enc.env — this is what you commit
 sops encrypt \
   --input-type dotenv \
   --output-type dotenv \
-  --in-place \
-  .env
+  .env > .enc.env
 
-## cat .env
+## cat .enc.env
 JWT_SECRET=ENC[AES256_GCM,data:+ZdkX501aUvs936QIUMwJPE=,iv:RsYWiUCYvM45+Y9x0oyCc0kIqJi84Rh4ht+4vS830aM=,tag:fhbm/g7a4dH+L8U8A/Iveg==,type:str]
 sops_age__list_0__map_enc=-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA0akpQdGRmakxVZUZQaGpi\ncEdsYXZpVjU4eWtka2dmV1VGbSs0aXFKa3lvCjJyVE4vei9JZFoyWS83VWl2SFc0\nRTZlSTFCK3dENDZyTWhCSEhRb2J6N1EKLS0tIER4L2xmWDV0WVdJMzBoTFFpVUZN\nVWlielhQTUFPRHQ3WGdPR1F
 
-## decrypt .env (prints to stdout, file stays encrypted)
+## decrypt .enc.env (prints to stdout — .enc.env stays encrypted)
 export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
 
-sops decrypt \
-  --input-type dotenv \
-  --output-type dotenv \
-  .env
+sops decrypt .enc.env
 
-## edit .env
-sops edit \
-  --input-type dotenv \
-  --output-type dotenv \
-  .env
+## edit .enc.env
+sops edit .enc.env
 
-## cat .env
+## cat .enc.env
 JWT_SECRET=ENC[AES256_GCM,data:+ZdkX501aUvs936QIUMwJPE=,iv:RsYWiUCYvM45+Y9x0oyCc0kIqJi84Rh4ht+4vS830aM=,tag:fhbm/g7a4dH+L8U8A/Iveg==,type:str]
 sops_age__list_0__map_enc=-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA0akpQdGRmakxVZUZQaGpi\ncEdsYXZpVjU4eWtka2dmV1VGbSs0aXFKa3lvCjJyVE4vei9JZFoyWS83VWl2SFc0\nRTZlSTFCK3dENDZyTWhCSEhRb2J6N1EKLS0tIER4L2xmWDV0WVdJMzBoTFFpVUZN\nVWlielhQTUFPR
 ```
+
+`sops decrypt`/`sops edit` need no `--input-type`/`--output-type` flags here — `.enc.env` still ends in `.env`, so SOPS auto-detects the dotenv format from the filename the same way it would for `.env` itself.
+
+## The `.enc.env` pattern
+
+Keep **one encrypted file in git**, and let every developer decrypt their own local `.env` — the exact file dotenv-based tools already expect, with zero config or code changes.
+
+- **`.enc.env`** — the encrypted source of truth. Edit it directly with `sops edit .enc.env`, commit it, push it — it's ciphertext.
+- **`.env`** — each developer's own decrypted copy. dotenv, Next.js, Vite, Docker Compose, and anything else that already reads `.env` keeps working, unmodified.
+
+```bash
+## one-time: keep the decrypted copy out of git
+echo ".env" >> .gitignore
+
+## decrypt your own local copy
+sops decrypt .enc.env > .env
+```
+
+Scope `.sops.yaml`'s `path_regex` to `\.enc\.env$` so only the encrypted file is ever a SOPS target — a stray plain `.env` is never accidentally matched.
+
+### Auto-decrypt with direnv
+
+If you use [direnv](https://direnv.net), skip the manual decrypt step entirely — a `.envrc` decrypts and loads the environment automatically every time you `cd` into the project:
+
+```bash
+# .envrc
+sops -d .enc.env > .env
+set -a
+source .env
+set +a
+```
+
+Run `direnv allow` once; every `cd` after that re-decrypts `.enc.env` and exports its variables into your shell. `set -a`/`set +a` toggles shell auto-export around the `source`, so every variable lands in the real environment instead of staying a local shell variable.
+
+Commit `.envrc` right alongside `.enc.env` — it's just automation, not a secret. `.env` stays gitignored, same as always.
 
 ## Learning steps
 
@@ -112,7 +140,7 @@ sops encrypt \
   .env
 ```
 
-This produces:
+By default this prints the ciphertext to stdout — `.env` on disk is untouched:
 
 ```bash
 JWT_SECRET=ENC[AES256_GCM,data:+ZdkX501aUvs936QIUMwJPE=,iv:RsYWiUCYvM45+Y9x0oyCc0kIqJi84Rh4ht+4vS830aM=,tag:fhbm/g7a4dH+L8U8A/Iveg==,type:str]
@@ -135,15 +163,21 @@ sops encrypt \
   .env
 ```
 
-To overwrite `.env` with its encrypted version instead of printing to stdout, use `--in-place`:
+> FYI: `--in-place` re-encrypts `.env` itself instead of printing to stdout —
+> ```bash
+> sops encrypt --input-type dotenv --output-type dotenv --in-place .env
+> ```
+> We won't use it going forward. Instead, redirect the output into a separate `.enc.env` file, so the plaintext and the ciphertext are never the same file:
 
 ```bash
 sops encrypt \
+  --age age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \
   --input-type dotenv \
   --output-type dotenv \
-  --in-place \
-  .env
+  .env > .enc.env
 ```
+
+`.env` stays exactly as it was; `.enc.env` is the new encrypted file — this is the one you'll commit.
 
 ### Decrypting a secret
 
@@ -163,21 +197,15 @@ The simplest approach is to set `SOPS_AGE_KEY_FILE` to point at `~/.config/sops/
 ```bash
 export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
 
-sops decrypt \
-  --input-type dotenv \
-  --output-type dotenv \
-  .env
+sops decrypt .enc.env
 ```
 
 ### Using `sops edit` as an editor
 
-Once `SOPS_AGE_KEY_FILE` is exported, you can use `sops edit` to edit the encrypted secret directly.
+Once `SOPS_AGE_KEY_FILE` is exported, you can use `sops edit` to edit `.enc.env` directly.
 
 ```bash
-sops edit \
-  --input-type dotenv \
-  --output-type dotenv \
-  .env
+sops edit .enc.env
 ```
 
 Change the values and save the file — SOPS re-encrypts them automatically.
@@ -207,9 +235,9 @@ sops encrypt \
   --input-type dotenv \
   --output-type dotenv \
   --unencrypted-regex '^(LOG_LEVEL|SERVER_PORT|DEMO_USER)$' \
-  .env
+  .env > .enc.env
 
-## output
+## cat .enc.env
 LOG_LEVEL=DEBUG
 SERVER_PORT=8080
 DEMO_USER=demo
@@ -237,11 +265,12 @@ creation_rules:
     unencrypted_regex: "^(LOG_LEVEL|SERVER_PORT|DEMO_USER)$"
 ```
 
-You can also add a `path_regex` to target specific files, so running `sops` against a matching file lets you edit its encrypted content directly.
+You can also add a `path_regex` to target specific files, so running `sops` against a matching file lets you edit its encrypted content directly. Scope it to `.enc.env` so a stray plain `.env` is never accidentally matched:
 
 ```.sops.yaml
 creation_rules:
-  - age: age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  - path_regex: \.enc\.env$
+    age: age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     unencrypted_regex: "^(LOG_LEVEL|SERVER_PORT|DEMO_USER)$"
 ```
 
@@ -261,12 +290,12 @@ creation_rules:
 
 A trailing `# name` comment is just a plain YAML comment — SOPS ignores it. It costs nothing to add but saves you from ever having to guess whose key `age1xxx...` was when you're reading `.sops.yaml` months later.
 
-2. Run `sops updatekeys .env` so SOPS updates the file's metadata with the new recipient:
+2. Run `sops updatekeys .enc.env` so SOPS updates the file's metadata with the new recipient:
 
 ```bash
-sops updatekeys .env
+sops updatekeys .enc.env
 
-2026/08/16 14:37:58 Syncing keys for file .../demo-sops/.env
+2026/08/16 14:37:58 Syncing keys for file .../demo-sops/.enc.env
 The following changes will be made to the file's groups:
 Group 1
     age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -274,9 +303,9 @@ Group 1
 Is this okay? (y/n):y
 ```
 
-> Changing `.sops.yaml` doesn't automatically re-encrypt your existing `.env` file — you'll need to re-encrypt it with `sops updatekeys .env`.
+> Changing `.sops.yaml` doesn't automatically re-encrypt your existing `.enc.env` file — you'll need to re-encrypt it with `sops updatekeys .enc.env`.
 
-### Migrating an existing `.env` to SOPS
+### Migrating an existing `.env` to `.enc.env`
 
 Say you already have:
 
@@ -284,43 +313,43 @@ Say you already have:
 - a `.sops.yaml` file
 - your age key/recipient configured
 
-Add a `path_regex` to `.sops.yaml` so SOPS knows which keys to encrypt this file with:
+Add a `path_regex` to `.sops.yaml` so SOPS knows which keys to encrypt with:
 
 ```.sops.yaml
 creation_rules:
-  - path_regex: \.env$
+  - path_regex: \.enc\.env$
     age: age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     unencrypted_regex: "^(LOG_LEVEL|SERVER_PORT|DEMO_USER)$"
 ```
 
-You can keep editing `.env` as a normal file, then encrypt it in place whenever you're ready:
+Keep editing `.env` as a normal file, then create `.enc.env` whenever you're ready:
 
 ```bash
-sops encrypt --in-place .env
+sops encrypt .env > .enc.env
 ```
 
-> ⚠️ Because the file is literally named `.env`, SOPS auto-detects the dotenv format from the filename — `path_regex` only decides which keys to encrypt with, not the format. If you rename the file to something SOPS doesn't recognize (like `.env.production`, covered next), add `--input-type dotenv --output-type dotenv` explicitly, otherwise SOPS defaults to JSON output:
+> ⚠️ SOPS auto-detects the dotenv format from a filename ending in `.env` — `.enc.env` still qualifies, so `path_regex` only decides which keys to encrypt with here, not the format. A different suffix (like `.env.production`, covered next) needs `--input-type dotenv --output-type dotenv` explicitly, otherwise SOPS defaults to JSON output:
 > ```bash
-> sops encrypt --input-type dotenv --output-type dotenv --in-place .env.production
+> sops encrypt --input-type dotenv --output-type dotenv .env.production
 > ```
 
-This encrypts `.env` directly — no separate `.enc.env` file needed. To edit it again, use `sops edit .env`. Decrypt it back to plain text with `sops decrypt --in-place .env`.
+This creates a separate `.enc.env` file — `.env` stays as your own local, gitignored plaintext copy. To edit the encrypted file again, use `sops edit .enc.env`. Decrypt it back to plain text with `sops decrypt .enc.env > .env`.
 
 ### Multiple environments (dev, prod) with different access
 
 Real projects usually have more than one `.env` — say one per environment — and not everyone should be able to decrypt every environment. Give each environment file its own `path_regex` and its own set of age recipients in `.sops.yaml`, so a developer's key only unlocks the environments they're meant to access.
 
-Name each file so it still ends in `.env` (e.g. `dev.env`, `prod.env`) — that's what lets SOPS auto-detect the dotenv format automatically, as explained above.
+Name each encrypted file so it still ends in `.env` (e.g. `dev.enc.env`, `prod.enc.env`) — that's what lets SOPS auto-detect the dotenv format automatically, as explained above. Each developer decrypts their own local `dev.env`/`prod.env` as needed, same as the single-environment `.enc.env` pattern.
 
 ```.sops.yaml
 creation_rules:
-  - path_regex: dev\.env$
+  - path_regex: dev\.enc\.env$
     age:
       - age1devxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  # alice
       - age1devyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy  # bob
     unencrypted_regex: "^(LOG_LEVEL|SERVER_PORT)$"
 
-  - path_regex: prod\.env$
+  - path_regex: prod\.enc\.env$
     age:
       - age1opsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  # carol
       - age1opsyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy  # dave
@@ -329,8 +358,8 @@ creation_rules:
 
 > Written as a YAML list (one key per line) instead of a single comma-joined string, so each recipient can carry its own `# name` comment. Both forms parse identically to SOPS — the list is just easier to annotate and review in a diff. Don't put a `#` comment inside the folded `>-`/`|` string form used elsewhere in this README; YAML treats it as literal text there, not a comment, and it would corrupt the recipient string.
 
-- `dev.env` is encrypted to alice and bob (the dev team's public keys).
-- `prod.env` is encrypted to carol and dave (the ops/production team's public keys).
+- `dev.enc.env` is encrypted to alice and bob (the dev team's public keys).
+- `prod.enc.env` is encrypted to carol and dave (the ops/production team's public keys).
 - SOPS checks `creation_rules` top to bottom and applies the first `path_regex` that matches — put more specific patterns first.
 
 > If you'd rather use the `.env.development` / `.env.production` naming convention, that works too — just remember SOPS won't auto-detect the format from those names, so add `--input-type dotenv --output-type dotenv` to every `encrypt`/`decrypt`/`edit` command, the same way as shown above.
@@ -338,19 +367,19 @@ creation_rules:
 Encrypt each file — the matching rule (and its recipients) is applied automatically:
 
 ```bash
-sops encrypt --in-place dev.env
-sops encrypt --in-place prod.env
+sops encrypt dev.env > dev.enc.env
+sops encrypt prod.env > prod.enc.env
 ```
 
-A developer holding only the dev private key can decrypt `dev.env`, but not `prod.env`:
+A developer holding only the dev private key can decrypt `dev.enc.env`, but not `prod.enc.env`:
 
 ```bash
 export SOPS_AGE_KEY_FILE=~/.config/sops/age/dev-keys.txt
 
-sops decrypt dev.env
+sops decrypt dev.enc.env
 ## DB_PASSWORD=dev-secret
 
-sops decrypt prod.env
+sops decrypt prod.enc.env
 ## Failed to get the data key required to decrypt the SOPS file.
 ##
 ## Group 0: FAILED
@@ -359,7 +388,7 @@ sops decrypt prod.env
 ##       | age: no identity matched any of the recipients.
 ```
 
-Only someone holding the production private key (`SOPS_AGE_KEY_FILE` pointing at their prod key) can decrypt `prod.env`. To grant or revoke access to one environment, edit that environment's `age` list in `.sops.yaml` and run `sops updatekeys <file>` — the other environment's recipients are untouched.
+Only someone holding the production private key (`SOPS_AGE_KEY_FILE` pointing at their prod key) can decrypt `prod.enc.env`. To grant or revoke access to one environment, edit that environment's `age` list in `.sops.yaml` and run `sops updatekeys <file>` — the other environment's recipients are untouched.
 
 ## How SOPS handles file formats
 
@@ -507,13 +536,13 @@ Because encryption happens leaf-by-leaf instead of on the whole file:
 
 If you use a format SOPS doesn't recognize as a tree (e.g. plain binary or an unrecognized extension), SOPS falls back to encrypting the entire file as one blob — you lose all of the above; `sops decrypt` (or `--output-type binary`) is then all-or-nothing.
 
-## Using the encrypted `.env` with docker-compose and other CLI tools
+## Using `.enc.env` with docker-compose and other CLI tools
 
-Docker, `docker-compose`, and most other CLIs have no idea what SOPS is — they just read whatever bytes are in the file you point them at. That's the trap: pointing one of these tools straight at your encrypted `.env` doesn't fail, it just quietly hands the container `ENC[...]` ciphertext as the literal value.
+Docker, `docker-compose`, and most other CLIs have no idea what SOPS is — they just read whatever bytes are in the file you point them at. That's the trap: pointing one of these tools straight at `.enc.env` doesn't fail, it just quietly hands the container `ENC[...]` ciphertext as the literal value.
 
 ### The pitfall: pointing a tool straight at the encrypted file
 
-Take the `.env` from the ["Challenge" section above](#challenge-some-keys-in-env-dont-need-to-be-encrypted), already encrypted, and a minimal `docker-compose.yml` that passes a couple of its keys into a container:
+Take the `.enc.env` from the ["Challenge" section above](#challenge-some-keys-in-env-dont-need-to-be-encrypted) and a minimal `docker-compose.yml` that passes a couple of its keys into a container:
 
 ```yaml
 ## cat docker-compose.yml
@@ -527,20 +556,20 @@ services:
 ```
 
 ```bash
-docker compose --env-file .env run --rm app
+docker compose --env-file .enc.env run --rm app
 
 ## output
 DATABASE_URL=ENC[AES256_GCM,data:peUXSKCZAINqF9Hg61YPkc2iqwnhlKP3M9Dl9iaU36STo/tC+cmiCA29WVX4zD3rPqhZGy9NPlzBqIxG,iv:IQ9pjZwPvqwW1wPYdihwq/uSLypMqirvMlpc554g3TA=,tag:BSHPueljUYaE/sIx8J7MXw==,type:str] JWT_SECRET=ENC[AES256_GCM,data:Zb6BKAEngeHT+EbiVd7/1wEi6Pc3TAlcjQclDIq02zUjQZY8XDcLyS1G8HoCoesNZrW1qRraznywDCzLE7HC,iv:fmHNGUFRn9sOpaVvnenXeVgH/pmIHiVXB7TjbGwTwcg=,tag:YFMRqcXaZWag0QMaS5mrMQ==,type:str]
 ```
 
-No error, no warning — the app just received two useless strings instead of a database URL and a secret. This is why you never `env_file: .env` / `--env-file .env` a SOPS-encrypted file directly; you always decrypt it into the command first.
+No error, no warning — the app just received two useless strings instead of a database URL and a secret. This is why you never `env_file: .enc.env` / `--env-file .enc.env` a SOPS-encrypted file directly; you always decrypt it into the command first.
 
 ### Fix 1: `sops exec-env` — decrypt straight into a process's environment, nothing touches disk
 
 `sops exec-env <file> '<command>'` decrypts `<file>` in memory, exports every key as an environment variable, runs `<command>` with that environment, and discards the plaintext the moment the command exits. No decrypted file is ever written.
 
 ```bash
-sops exec-env .env 'docker compose run --rm app'
+sops exec-env .enc.env 'docker compose run --rm app'
 
 ## output
 DATABASE_URL=postgres://user:password@localhost:5432/mydb?sslmode=require JWT_SECRET=7f3c9a2e1d8b4f6a9c0e7d2b5a1f8c3e6d9b4a7f2c5e8d1a6b9c3f0e7d4a2b8
@@ -549,9 +578,9 @@ DATABASE_URL=postgres://user:password@localhost:5432/mydb?sslmode=require JWT_SE
 This works for `docker compose`'s `environment:` passthrough (shown above) because compose picks up bare `- VAR` names from whatever process environment it was launched in — `sops exec-env` is that process. It also works for any other command that just reads env vars, with no Docker involved at all:
 
 ```bash
-sops exec-env .env 'go run ./cmd/server'
-sops exec-env .env 'npm run start'
-sops exec-env .env 'psql "$DATABASE_URL" -c "select 1"'
+sops exec-env .enc.env 'go run ./cmd/server'
+sops exec-env .enc.env 'npm run start'
+sops exec-env .enc.env 'psql "$DATABASE_URL" -c "select 1"'
 ```
 
 ### Fix 2: `sops exec-file` — when a tool insists on a real file path
@@ -559,7 +588,7 @@ sops exec-env .env 'psql "$DATABASE_URL" -c "select 1"'
 Some flags only accept a path — `docker compose --env-file <path>` is one, since that flag is used to populate the values compose substitutes into the compose file itself, not just the container's environment. `sops exec-file <file> '<command with {} for the path>'` decrypts to a real temporary file, substitutes its path wherever `{}` appears in `<command>`, runs it, then deletes the file when the command exits.
 
 ```bash
-sops exec-file --no-fifo --input-type dotenv --output-type dotenv --filename decrypted.env .env \
+sops exec-file --no-fifo --input-type dotenv --output-type dotenv --filename decrypted.env .enc.env \
   'docker compose --env-file {} run --rm app'
 
 ## output
@@ -568,10 +597,10 @@ DATABASE_URL=postgres://user:password@localhost:5432/mydb?sslmode=require JWT_SE
 
 > `--no-fifo` matters here: by default `exec-file` hands the command a named pipe instead of a regular file, which is fine for a tool that reads the contents once (like `cat {}`) but hangs a tool that opens the file more than once — which `docker compose` does. `--no-fifo` writes an actual temp file instead, deleted automatically once the command returns.
 
-`--input-type`/`--output-type` are only needed here because `decrypted.env` (the `--filename`) doesn't end in `.env`, so SOPS can't infer the format from that name the same way it does from `.env` itself — the same rule from the ["How SOPS handles file formats"](#how-sops-handles-file-formats) section above.
+`--input-type`/`--output-type` are only needed here because `decrypted.env` (the `--filename`) doesn't end in `.env`, so SOPS can't infer the format from that name the same way it does from `.enc.env` itself — the same rule from the ["How SOPS handles file formats"](#how-sops-handles-file-formats) section above.
 
 ### Which one to reach for
 
 - **`sops exec-env`** — the default choice. Use it whenever the tool just needs environment variables: `docker compose` (via `environment:` passthrough), a locally-run app, a migration script, `psql`/`redis-cli`, CI steps, anything.
 - **`sops exec-file`** — only when a tool's flag hard-requires an actual file path, like `docker compose --env-file`, and reading from the process environment isn't an option.
-- **Never**: `sops decrypt --in-place .env`, run your command, then `sops encrypt --in-place .env` again to "put it back." It works, but there's a real window where a fully decrypted `.env` sits on disk — a crash, a forgotten step, or a stray `git add .` before the final `encrypt` leaves plaintext secrets exposed. `exec-env`/`exec-file` never create that window.
+- **Never**: `sops decrypt --in-place .enc.env`, run your command, then `sops encrypt --in-place .enc.env` again to "put it back." It works, but there's a real window where a fully decrypted `.env` sits on disk — a crash, a forgotten step, or a stray `git add .` before the final `encrypt` leaves plaintext secrets exposed. `exec-env`/`exec-file` never create that window.
