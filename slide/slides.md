@@ -131,27 +131,76 @@ layout: default
 
 # The demo, end to end
 
-<h2>Encrypt in place, decrypt to stdout, edit transparently</h2>
+<h2>Encrypt to <code>.enc.env</code>, decrypt to stdout, edit transparently</h2>
 
-```bash {1-3|5-11|13-14}
+```bash {1-3|5-12|14-15}
 ## cat .env
 JWT_SECRET=some-secret-value
 
 export SOPS_AGE_RECIPIENTS="age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-## encrypt .env in place
+## encrypt .env into a new file, .enc.env
 sops encrypt \
   --input-type dotenv \
   --output-type dotenv \
-  --in-place \
-  .env
+  .env > .enc.env
 
-## cat .env
+## cat .enc.env
 JWT_SECRET=ENC[AES256_GCM,data:+ZdkX501aUvs936Q...,type:str]
 ```
 
 <div class="g-callout success" style="margin-top: 1rem;">
-  <p>The file stays named <code>.env</code> — no separate encrypted copy to keep in sync.</p>
+  <p><code>.env</code> stays plain text for your own tools; <code>.enc.env</code> is the
+  encrypted file that's safe to commit and share.</p>
+</div>
+
+---
+layout: default
+---
+
+# The `.enc.env` pattern
+
+<p>Keep <strong>one encrypted file in git</strong>, and let every developer decrypt
+their own local <code>.env</code> — the exact file dotenv-based tools already
+expect, with zero config or code changes.</p>
+
+<div class="dp-diagram">
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-blue">📦</div>
+    <div class="dp-label"><code>.enc.env</code></div>
+    <div class="dp-sub">committed to git — ciphertext only</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">sops decrypt</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-yellow">📄</div>
+    <div class="dp-label"><code>.env</code></div>
+    <div class="dp-sub">local only — gitignored</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">auto-loaded</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-success">🚀</div>
+    <div class="dp-label">your app</div>
+    <div class="dp-sub">any dotenv tool, completely unmodified</div>
+  </div>
+</div>
+
+```bash
+echo ".env" >> .gitignore
+
+## SOPS auto-detects the format — .enc.env still ends in .env
+sops decrypt .enc.env > .env
+```
+
+<div class="g-callout info" style="margin-top: 0.9rem;">
+  <p>Edit the source of truth directly with <code>sops edit .enc.env</code>, and scope
+  <code>.sops.yaml</code>'s <code>path_regex</code> to <code>\.enc\.env$</code> so a
+  stray plain <code>.env</code> is never accidentally treated as a SOPS file.</p>
 </div>
 
 ---
@@ -1099,7 +1148,7 @@ layout: default
 
 # The pitfall
 
-<p>Point a tool straight at an encrypted <code>.env</code> and it won't fail —
+<p>Point a tool straight at the encrypted <code>.enc.env</code> and it won't fail —
 take a minimal <code>docker-compose.yml</code> that passes a couple of its
 keys into a container:</p>
 
@@ -1115,7 +1164,7 @@ services:
 ```
 
 ```bash
-docker compose --env-file .env run --rm app
+docker compose --env-file .enc.env run --rm app
 
 ## output
 DATABASE_URL=ENC[AES256_GCM,data:peUXSKCZ...] JWT_SECRET=ENC[AES256_GCM,data:Zb6BKAEn...]
@@ -1124,7 +1173,7 @@ DATABASE_URL=ENC[AES256_GCM,data:peUXSKCZ...] JWT_SECRET=ENC[AES256_GCM,data:Zb6
 <div class="g-callout danger" style="margin-top: 1rem;">
   <p><strong>No error, no warning</strong> — the app just received two useless
   ciphertext strings instead of a database URL and a secret. Never
-  <code>env_file: .env</code> / <code>--env-file .env</code> a SOPS-encrypted
+  <code>env_file: .enc.env</code> / <code>--env-file .enc.env</code> a SOPS-encrypted
   file directly — always decrypt it into the command first.</p>
 </div>
 
@@ -1141,7 +1190,7 @@ environment, and discards the plaintext the moment it exits.</p>
 <div class="dp-diagram">
   <div class="dp-step">
     <div class="dp-icon dp-icon-blue">🔒</div>
-    <div class="dp-label">encrypted .env</div>
+    <div class="dp-label"><code>.enc.env</code></div>
     <div class="dp-sub">ENC[...] values on disk</div>
   </div>
   <div class="dp-connector">
@@ -1174,7 +1223,7 @@ environment, and discards the plaintext the moment it exits.</p>
 </div>
 
 ```bash
-sops exec-env .env 'docker compose run --rm app'
+sops exec-env .enc.env 'docker compose run --rm app'
 
 ## output
 DATABASE_URL=postgres://user:pass@db:5432/mydb JWT_SECRET=7f3c9a2e1d8b4f6a...
@@ -1200,7 +1249,7 @@ not just the container's environment.</p>
 
 ```bash
 sops exec-file --no-fifo --input-type dotenv --output-type dotenv \
-  --filename decrypted.env .env \
+  --filename decrypted.env .enc.env \
   'docker compose --env-file {} run --rm app'
 ## output
 DATABASE_URL=postgres://user:pass@db:5432/mydb JWT_SECRET=7f3c9a2e1d8b4f6a...
@@ -1246,7 +1295,7 @@ layout: default
   </div>
   <div class="g-card accent-red">
     <h3>Never</h3>
-    <p><code>sops decrypt --in-place .env</code>, run your command, then
+    <p><code>sops decrypt --in-place .enc.env</code>, run your command, then
     <code>encrypt --in-place</code> to "put it back." A crash or a stray
     <code>git add .</code> in between leaves plaintext exposed.</p>
   </div>
