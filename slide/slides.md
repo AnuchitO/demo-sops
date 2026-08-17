@@ -207,43 +207,6 @@ sops decrypt .enc.env > .env
 layout: default
 ---
 
-# Tip · Auto-decrypt with direnv
-
-<p><a href="https://direnv.net">direnv</a> loads environment variables the moment you
-<code>cd</code> into a project — pair it with SOPS and no one ever has to
-remember to run <code>sops decrypt</code> by hand:</p>
-
-```bash
-# .envrc
-sops -d .enc.env > .env
-set -a
-source .env
-set +a
-```
-
-<div class="g-grid-2" style="margin-top: 1rem;">
-  <div class="g-card accent-blue">
-    <h3><code>set -a</code> / <code>set +a</code></h3>
-    <p>Toggles shell auto-export around the <code>source</code>, so every
-    variable from <code>.env</code> lands in the real environment — not just
-    as a local shell variable.</p>
-  </div>
-  <div class="g-card accent-green">
-    <h3>One-time setup</h3>
-    <p><code>direnv allow</code> approves the file once; every <code>cd</code>
-    after that re-decrypts and reloads automatically.</p>
-  </div>
-</div>
-
-<div class="g-callout info" style="margin-top: 1rem;">
-  <p>Commit <code>.envrc</code> right alongside <code>.enc.env</code> — it's just
-  automation, not a secret. <code>.env</code> stays gitignored, same as always.</p>
-</div>
-
----
-layout: default
----
-
 <div class="g-section">
   <div class="g-eyebrow">Learning steps</div>
   <h1>Let's build this up from scratch</h1>
@@ -1376,4 +1339,41 @@ layout: default
   <p><code>exec-env</code> / <code>exec-file</code> decrypt straight into a
   process or a throwaway temp file — there's never a window where a fully
   decrypted <code>.env</code> sits on disk waiting to be committed or leaked.</p>
+</div>
+
+---
+layout: default
+---
+
+# Tip · Auto-decrypt with direnv
+
+<p><a href="https://direnv.net">direnv</a> loads environment variables the moment you
+<code>cd</code> into a project — pair it with SOPS and no one ever has to
+remember to run <code>sops decrypt</code> by hand:</p>
+
+```bash
+# .envrc
+sops -d .enc.env > .env
+set -a
+source .env
+set +a
+```
+
+<div class="g-grid-2" style="margin-top: 1rem;">
+  <div class="g-card accent-blue">
+    <h3><code>set -a</code> / <code>set +a</code></h3>
+    <p>Toggles shell auto-export around the <code>source</code>, so every
+    variable from <code>.env</code> lands in the real environment — not just
+    as a local shell variable.</p>
+  </div>
+  <div class="g-card accent-green">
+    <h3>One-time setup</h3>
+    <p><code>direnv allow</code> approves the file once; every <code>cd</code>
+    after that re-decrypts and reloads automatically.</p>
+  </div>
+</div>
+
+<div class="g-callout info" style="margin-top: 1rem;">
+  <p>Commit <code>.envrc</code> right alongside <code>.enc.env</code> — it's just
+  automation, not a secret. <code>.env</code> stays gitignored, same as always.</p>
 </div>
