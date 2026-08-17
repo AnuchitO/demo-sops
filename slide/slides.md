@@ -26,7 +26,7 @@ class: g-slide
 </div>
 
 <div class="g-brand">
-  <img src="/anuchito_logo.png" alt="AnuchitO" />
+  <img src="/anuchito_logo.svg" alt="AnuchitO" />
 </div>
 
 <div class="g-footer">
