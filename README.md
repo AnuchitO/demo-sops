@@ -356,3 +356,149 @@ sops decrypt prod.env
 ```
 
 Only someone holding the production private key (`SOPS_AGE_KEY_FILE` pointing at their prod key) can decrypt `prod.env`. To grant or revoke access to one environment, edit that environment's `age` list in `.sops.yaml` and run `sops updatekeys <file>` — the other environment's recipients are untouched.
+
+## How SOPS handles file formats
+
+SOPS picks its encryption strategy from the file extension. YAML, JSON, `.env`, and INI files are all treated the same way under the hood: SOPS parses the file into a **tree** of keys and values, walks to every leaf, and encrypts only the leaf values in place — keys, nesting, and structure stay in plain text. That's why in every example above you can still read `JWT_SECRET=` or `database:` without decrypting anything; only what comes after is ciphertext.
+
+That same tree is also what keeps the file tamper-evident. Every encrypted file gets a `sops_mac` (YAML/JSON: `sops.mac`) — a MAC computed over the tree's keys and values. If someone edits the file by hand (adds a key, renames one, reorders values) without going through `sops`, the MAC no longer matches the tree, and `sops decrypt`/`sops edit` will refuse the file instead of silently trusting it.
+
+The examples below all encrypt the exact same secret — a `database.password` — in each of the four tree formats, so you can compare how each one looks once encrypted. All four use the same age recipient and the same `sops encrypt` shape; only the format flags and file extension change.
+
+### YAML
+
+```yaml
+## cat config.yaml
+database:
+  host: localhost
+  port: 5432
+  password: super-secret
+```
+
+```bash
+sops encrypt --in-place config.yaml
+```
+
+```yaml
+## cat config.yaml
+database:
+    host: ENC[AES256_GCM,data:r7o0T9RQ21ZE,iv:eRg8vG02q1V3ElyGjzqSu5fJfy+dMh6yf2RGnSHGU9Q=,tag:ZGZGGeKcZgGfkYhac1h+6A==,type:str]
+    port: ENC[AES256_GCM,data:x1LEzQ==,iv:asilQAtL09jcHZvUOYb/YlqvSBC8LBMb33d3iD2kYBQ=,tag:4DoC6mQCBfdHKCmFzWyxPA==,type:int]
+    password: ENC[AES256_GCM,data:Vzvb/Q0Gv3rsGuon,iv:kAKnZOIIMZ/nGWbkpgBCRMRt+7kafSaDxh9xYCu9i8Q=,tag:0zI0dHOYyO/pkXxxsootWg==,type:str]
+sops:
+    age:
+        - recipient: age1lm37nkhmqrgypkw9mtxcz6mvvpfss5pcccu2jtsul8qdgmeg74eq6ynugc
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            ...
+            -----END AGE ENCRYPTED FILE-----
+    mac: ENC[AES256_GCM,data:8v+rRrtr4tsVh2HJaKwIc...,type:str]
+    version: 3.13.3
+```
+
+`.yaml`/`.yml` needs no `--input-type`/`--output-type` flags — SOPS recognizes YAML from the extension automatically. Notice `host`, `port`, and `password` are each encrypted individually (even `port`, a number, keeps its `type:int` so it decrypts back to `5432`, not the string `"5432"`), while the `database:` key and the nesting itself stay plain text.
+
+### JSON
+
+```json
+## cat config.json
+{
+  "database": {
+    "host": "localhost",
+    "port": 5432,
+    "password": "super-secret"
+  }
+}
+```
+
+```bash
+sops encrypt --in-place config.json
+```
+
+```json
+## cat config.json
+{
+	"database": {
+		"host": "ENC[AES256_GCM,data:avdSjyfQkyyw,iv:vd1THYicZKxYWfTlRZnkObnsxhfRp/euaFuGZVSSIrs=,tag:qhMsa/BJUf9KgsnFy2JtKQ==,type:str]",
+		"port": "ENC[AES256_GCM,data:hQK+Bw==,iv:HfH7ndiVhZZND/vhBog9fk02I7Qu9GX2+f5dksOnyHI=,tag:8b2gNiG14ViukScOrceOgw==,type:int]",
+		"password": "ENC[AES256_GCM,data:23eqK1QFLLJ93Cyl,iv:EuZEzI6A2TOc+Da/ctO811g7tYROVtlApYcKoydqzxc=,tag:/QpebTuewOyQNodVWpr0/g==,type:str]"
+	},
+	"sops": {
+		"age": [
+			{
+				"recipient": "age1lm37nkhmqrgypkw9mtxcz6mvvpfss5pcccu2jtsul8qdgmeg74eq6ynugc",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\n...\n-----END AGE ENCRYPTED FILE-----\n"
+			}
+		],
+		"mac": "ENC[AES256_GCM,data:A71MudbS+4Uk7mdy1NEHMpCA6rMa...,type:str]",
+		"version": "3.13.3"
+	}
+}
+```
+
+Same idea as YAML, just wrapped in JSON syntax — the tree here is the JSON object itself. Every `ENC[...]` value is still valid JSON (a quoted string), so the file stays parseable even while encrypted; only SOPS-aware tooling knows to treat those strings as ciphertext.
+
+### ENV (dotenv)
+
+This is the format used throughout the rest of this README:
+
+```bash
+## cat .env
+DATABASE_HOST=localhost
+DATABASE_PASSWORD=super-secret
+```
+
+```bash
+sops encrypt --input-type dotenv --output-type dotenv --in-place .env
+```
+
+```bash
+## cat .env
+DATABASE_HOST=ENC[AES256_GCM,data:KJUZjAe56yfR,iv:YAnNiWgjLAK1Sf3bBa4q+WbxNBSiKYXJcqZRvXRU8O4=,tag:7uypUjfSiGIZpFYowBWvrA==,type:str]
+DATABASE_PASSWORD=ENC[AES256_GCM,data:K+comU2ozQRh1ePx,iv:qa0E7MeLy+OsKiyMrsBmpd9bPpuhg2vv8lnVwFe4h/8=,tag:DshA5186l4AedPDQczAZfQ==,type:str]
+sops_age__list_0__map_recipient=age1lm37nkhmqrgypkw9mtxcz6mvvpfss5pcccu2jtsul8qdgmeg74eq6ynugc
+sops_age__list_0__map_enc=-----BEGIN AGE ENCRYPTED FILE-----\n...\n-----END AGE ENCRYPTED FILE-----\n
+sops_mac=ENC[AES256_GCM,data:4FDrDwadGAJ9ag9UBlKoaDVmyYMU9t...,type:str]
+sops_version=3.13.3
+```
+
+`.env` has no native nesting, so SOPS treats each `KEY=value` line as one leaf of a flat tree — that's the "tree" for dotenv. Since there's no place to nest a `sops:` block like YAML/JSON have, the metadata is flattened into extra `sops_*` keys appended to the same file, prefixed so they don't collide with your real variables. This is also the one format that needs explicit `--input-type dotenv --output-type dotenv` unless the filename itself ends in `.env`, which SOPS auto-detects.
+
+### INI
+
+```ini
+## cat config.ini
+[database]
+host = localhost
+password = super-secret
+```
+
+```bash
+sops encrypt --input-type ini --output-type ini --in-place config.ini
+```
+
+```ini
+## cat config.ini
+[database]
+host     = ENC[AES256_GCM,data:Sas/g3vdHoOv,iv:FNLMEEX32HGCvy1wjeuNZfRKYYN4ODl21MAzzwWLWEM=,tag:xG7rhwUG2ztlv9PXc8ZGnQ==,type:str]
+password = ENC[AES256_GCM,data:tEGD8UUFr/XuESPa,iv:ThdTqku5grDsOUDM50sgO811eli65HxdTlKtixLDVFg=,tag:pWfLz0yomZ4RWEXIEUDgMg==,type:str]
+
+[sops]
+age__list_0__map_recipient = age1lm37nkhmqrgypkw9mtxcz6mvvpfss5pcccu2jtsul8qdgmeg74eq6ynugc
+age__list_0__map_enc       = -----BEGIN AGE ENCRYPTED FILE-----\n...\n-----END AGE ENCRYPTED FILE-----\n
+mac                        = ENC[AES256_GCM,data:GC2JTDnWexrZqomo1oiQBfHj8edWsWho...,type:str]
+version                    = 3.13.3
+```
+
+INI has sections (`[database]`) but no deeper nesting, so its tree is one level: section → key → value, same flattening trick as dotenv is used for the `[sops]` section since INI can't nest structured metadata either. Like dotenv, INI needs explicit `--input-type ini --output-type ini` — SOPS can't guess the format from a `.ini` extension the way it can for `.yaml`, `.json`, or `.env`.
+
+### Why this matters
+
+Because encryption happens leaf-by-leaf instead of on the whole file:
+
+- **You can `git diff` a change and see which key changed**, even though you can't see its new value.
+- **Partial decryption still works** — `sops decrypt --extract '["database"]["password"]' config.yaml` pulls just one value without decrypting the rest.
+- **`--unencrypted-regex` / `--unencrypted-suffix`** (used earlier for `LOG_LEVEL` and `SERVER_PORT`) can leave specific leaves in plain text, because SOPS is already visiting the tree one leaf at a time.
+- **Tampering is detected**, not just hidden — the MAC over the tree means a hand-edited key or value breaks decryption instead of silently succeeding.
+
+If you use a format SOPS doesn't recognize as a tree (e.g. plain binary or an unrecognized extension), SOPS falls back to encrypting the entire file as one blob — you lose all of the above; `sops decrypt` (or `--output-type binary`) is then all-or-nothing.
