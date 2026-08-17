@@ -1078,3 +1078,182 @@ layout: default
   falls back to encrypting the whole file as one blob — none of the above
   applies, and decryption becomes all-or-nothing.</p>
 </div>
+
+---
+layout: default
+---
+
+<div class="g-section">
+  <div class="g-eyebrow">In practice</div>
+  <h1>Using SOPS with Docker &amp; other CLI tools</h1>
+  <p class="g-sub">
+    Docker, <code>docker-compose</code>, and most other CLIs have no idea
+    what SOPS is — they just read whatever bytes are in the file you point
+    them at.
+  </p>
+</div>
+
+---
+layout: default
+---
+
+# The pitfall
+
+<p>Point a tool straight at an encrypted <code>.env</code> and it won't fail —
+take a minimal <code>docker-compose.yml</code> that passes a couple of its
+keys into a container:</p>
+
+```yaml
+## cat docker-compose.yml
+services:
+  app:
+    image: alpine:3.20
+    command: ["sh", "-c", "echo DATABASE_URL=$DATABASE_URL JWT_SECRET=$JWT_SECRET"]
+    environment:
+      - DATABASE_URL
+      - JWT_SECRET
+```
+
+```bash
+docker compose --env-file .env run --rm app
+
+## output
+DATABASE_URL=ENC[AES256_GCM,data:peUXSKCZ...] JWT_SECRET=ENC[AES256_GCM,data:Zb6BKAEn...]
+```
+
+<div class="g-callout danger" style="margin-top: 1rem;">
+  <p><strong>No error, no warning</strong> — the app just received two useless
+  ciphertext strings instead of a database URL and a secret. Never
+  <code>env_file: .env</code> / <code>--env-file .env</code> a SOPS-encrypted
+  file directly — always decrypt it into the command first.</p>
+</div>
+
+---
+layout: default
+---
+
+# Fix 1 · `sops exec-env`
+
+<p><code>sops exec-env &lt;file&gt; '&lt;command&gt;'</code> decrypts in memory,
+exports every key as an environment variable, runs the command with that
+environment, and discards the plaintext the moment it exits.</p>
+
+<div class="dp-diagram">
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-blue">🔒</div>
+    <div class="dp-label">encrypted .env</div>
+    <div class="dp-sub">ENC[...] values on disk</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">exec-env</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-yellow">🧠</div>
+    <div class="dp-label">decrypted in memory</div>
+    <div class="dp-sub">exported as real env vars</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">runs</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-green">⚙️</div>
+    <div class="dp-label">your command</div>
+    <div class="dp-sub">sees plaintext values</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">exits →</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-success">🗑️</div>
+    <div class="dp-label">discarded</div>
+    <div class="dp-sub">plaintext never touches disk</div>
+  </div>
+</div>
+
+```bash
+sops exec-env .env 'docker compose run --rm app'
+
+## output
+DATABASE_URL=postgres://user:pass@db:5432/mydb JWT_SECRET=7f3c9a2e1d8b4f6a...
+```
+
+<div class="g-callout success" style="margin-top: 0.6rem;">
+  <p>Works for <code>docker compose</code>'s <code>environment:</code> passthrough
+  above because compose picks up bare <code>- VAR</code> names from whatever
+  process launched it — <code>exec-env</code> <em>is</em> that process. It also
+  works for anything that just reads env vars: <code>go run</code>,
+  <code>npm run start</code>, <code>psql</code>, CI steps.</p>
+</div>
+
+---
+layout: default
+---
+
+# Fix 2 · `sops exec-file`
+
+<p>Some flags only accept a path — <code>docker compose --env-file &lt;path&gt;</code>
+is one, since it populates values <em>substituted into the compose file</em>,
+not just the container's environment.</p>
+
+```bash
+sops exec-file --no-fifo --input-type dotenv --output-type dotenv \
+  --filename decrypted.env .env \
+  'docker compose --env-file {} run --rm app'
+## output
+DATABASE_URL=postgres://user:pass@db:5432/mydb JWT_SECRET=7f3c9a2e1d8b4f6a...
+```
+
+<div class="g-grid-2" style="margin-top: 0.7rem;">
+  <div class="g-card compact accent-blue">
+    <h3><code>{}</code></h3>
+    <p>The path to a real, temporary decrypted file — deleted automatically
+    once the command returns.</p>
+  </div>
+  <div class="g-card compact accent-yellow">
+    <h3><code>--no-fifo</code></h3>
+    <p>Forces a real temp file. By default <code>exec-file</code> hands over a
+    named pipe, which hangs a tool that opens the file more than once.</p>
+  </div>
+</div>
+
+<div class="g-callout info" style="margin-top: 0.6rem;">
+  <p><code>--input-type</code>/<code>--output-type</code> are needed because
+  <code>decrypted.env</code> doesn't end in <code>.env</code>, so SOPS can't
+  infer the format the way it does for <code>.env</code> itself.</p>
+</div>
+
+---
+layout: default
+---
+
+# Which one to reach for
+
+<div class="g-grid-3" style="margin-top: 0.8rem;">
+  <div class="g-card accent-green">
+    <h3>sops exec-env</h3>
+    <p>The default choice. Anything that just needs environment variables:
+    <code>docker compose</code> (via <code>environment:</code>), a locally-run
+    app, a migration script, <code>psql</code>/<code>redis-cli</code>, CI steps.</p>
+  </div>
+  <div class="g-card accent-yellow">
+    <h3>sops exec-file</h3>
+    <p>Only when a tool's flag hard-requires a real file path — like
+    <code>docker compose --env-file</code> — and the process environment
+    isn't an option.</p>
+  </div>
+  <div class="g-card accent-red">
+    <h3>Never</h3>
+    <p><code>sops decrypt --in-place .env</code>, run your command, then
+    <code>encrypt --in-place</code> to "put it back." A crash or a stray
+    <code>git add .</code> in between leaves plaintext exposed.</p>
+  </div>
+</div>
+
+<div class="g-callout" style="margin-top: 1rem;">
+  <p><code>exec-env</code> / <code>exec-file</code> decrypt straight into a
+  process or a throwaway temp file — there's never a window where a fully
+  decrypted <code>.env</code> sits on disk waiting to be committed or leaked.</p>
+</div>
