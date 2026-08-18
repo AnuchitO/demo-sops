@@ -950,6 +950,196 @@ layout: default
 ---
 
 <div class="g-section">
+  <div class="g-eyebrow">Real scenarios</div>
+  <h1>Three days in the life of <code>.enc.env</code></h1>
+  <p class="g-sub">
+    Alice, Bob, and Eve — cryptography's usual cast — starting a project,
+    growing the team, and testing what a public repo actually exposes.
+  </p>
+</div>
+
+---
+layout: default
+---
+
+# Day 1 · Alice starts a new project
+
+<p>👩‍💻 Alice is starting a brand-new service. She wants it safe to commit
+from the very first push:</p>
+
+<div class="dp-diagram">
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-blue">👩‍💻</div>
+    <div class="dp-label">Alice</div>
+    <div class="dp-sub">writes .env locally</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">age-keygen</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-yellow">🔑</div>
+    <div class="dp-label">her own key pair</div>
+    <div class="dp-sub">public half in .sops.yaml</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">sops encrypt</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-green">🔒</div>
+    <div class="dp-label"><code>.enc.env</code></div>
+    <div class="dp-sub">.env → ciphertext</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">git push</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-success">📦</div>
+    <div class="dp-label">the repo</div>
+    <div class="dp-sub">only .enc.env + .sops.yaml committed</div>
+  </div>
+</div>
+
+<div class="g-callout success" style="margin-top: 1rem;">
+  <p><code>.env</code> never leaves Alice's laptop — the repo only ever sees
+  ciphertext and public keys, from the very first commit.</p>
+</div>
+
+---
+layout: default
+---
+
+# Day 12 · Bob joins the team
+
+<p>🧑‍💻 A new teammate needs access — without anyone re-sharing a password
+over Slack:</p>
+
+<div class="dp-diagram">
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-blue">🧑‍💻</div>
+    <div class="dp-label">Bob</div>
+    <div class="dp-sub">generates his own key pair</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">public key only</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-yellow">📤</div>
+    <div class="dp-label">sends it to Alice</div>
+    <div class="dp-sub">safe over Slack, email, anywhere</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">updatekeys</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-green">👩‍💻</div>
+    <div class="dp-label">Alice</div>
+    <div class="dp-sub">adds it to .sops.yaml, re-keys</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">sops decrypt</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-success">🔓</div>
+    <div class="dp-label">Bob</div>
+    <div class="dp-sub">clones the repo, decrypts his own .env</div>
+  </div>
+</div>
+
+<div class="g-callout success" style="margin-top: 1rem;">
+  <p>Bob's <strong>private</strong> key never travels anywhere either —
+  only the public half ever left his machine.</p>
+</div>
+
+---
+layout: default
+---
+
+# Day 40 · Eve finds the public repo
+
+<p>🕵️ The repo goes public. Eve isn't on the team — but anyone can now read
+<code>.enc.env</code> and <code>.sops.yaml</code>:</p>
+
+<div class="dp-diagram">
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-blue">🕵️</div>
+    <div class="dp-label">Eve</div>
+    <div class="dp-sub">clones the public repo</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">only ciphertext</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-yellow">👀</div>
+    <div class="dp-label">reads .enc.env</div>
+    <div class="dp-sub">every value is ENC[...]</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">edits the yaml</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-yellow">🔑</div>
+    <div class="dp-label">adds her own key</div>
+    <div class="dp-sub">to .sops.yaml — just a text edit</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">tries</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-red">⚠️</div>
+    <div class="dp-label"><code>sops updatekeys</code></div>
+    <div class="dp-sub">to grant herself access</div>
+  </div>
+</div>
+
+<div class="g-callout danger" style="margin-top: 1rem;">
+  <p>Editing <code>.sops.yaml</code> is just editing text in her own fork — it
+  never touches the ciphertext. What happens when she runs that command?</p>
+</div>
+
+---
+layout: default
+---
+
+# Day 40 · Why Eve's attempt fails
+
+```bash
+sops updatekeys .enc.env
+
+## Failed to get the data key required to decrypt the SOPS file.
+## Group 0: FAILED
+##   age1evexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: FAILED
+##     - age: no identity matched any of the recipients.
+```
+
+<div class="g-callout info" style="margin-top: 1rem;">
+  <p><code>updatekeys</code> re-wraps the <strong>current</strong> DATA_KEY for
+  whoever is listed in <code>.sops.yaml</code> — but first it has to unwrap
+  that DATA_KEY using one of the file's <em>existing</em> recipients. Eve
+  holds neither Alice's nor Bob's private key, so there's nothing for her to
+  re-wrap in the first place — the same wrapped-DATA_KEY mechanism from the
+  deep dive.</p>
+</div>
+
+<div class="g-callout success" style="margin-top: 0.8rem;">
+  <p>Adding a public key to <code>.sops.yaml</code> only ever <em>declares
+  intent</em> — someone who can already decrypt the file still has to run
+  <code>updatekeys</code> for it to mean anything. A public repo stays safe.</p>
+</div>
+
+---
+layout: default
+---
+
+<div class="g-section">
   <div class="g-eyebrow">Bonus</div>
   <h1>How SOPS handles file formats</h1>
   <p class="g-sub">
