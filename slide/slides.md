@@ -193,6 +193,8 @@ expect, with zero config or code changes.</p>
 ```bash
 echo ".env" >> .gitignore
 
+export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
+
 ## SOPS auto-detects the format — .enc.env still ends in .env
 sops decrypt .enc.env > .env
 ```
