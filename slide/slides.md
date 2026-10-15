@@ -526,7 +526,6 @@ layout: default
 </svg>
 <span class="sc-tx sc-center sc-chip-t" style="left:69.17%;top:19.69%">git pull</span>
 <span class="sc-tx sc-center sc-b" style="left:80.95%;top:33.65%">Sam</span>
-<span class="sc-tx sc-center sc-sub" style="left:80.95%;top:39.41%">any teammate</span>
 </div>
 <div class="sc-layer" v-click>
 <svg class="sc-svg" viewBox="0 0 840 300" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s5-3-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-green" d="M0 0 L10 5 L0 10 z"/></marker></defs>
