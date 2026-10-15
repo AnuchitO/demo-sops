@@ -690,3 +690,5 @@ html.dark .dk-node {
 .sc-svg .sc-chip { fill: var(--g-bg); stroke: var(--g-border); stroke-width: 1; }
 
 @keyframes sc-flow { to { stroke-dashoffset: -22; } }
+.sc-svg .sc-fill-bg { fill: var(--g-bg); }
+.sc-tx.sc-t-bg { color: var(--g-bg); }

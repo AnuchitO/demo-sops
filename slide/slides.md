@@ -385,7 +385,7 @@ Change it, commit, push. Teammates just decrypt it into <code>.env</code>.</p>
 layout: default
 ---
 
-# Scenario 4 · Every teammate has their own key
+# Key Pair
 
 <p>Sam makes a <strong>key pair</strong> with <code>age-keygen</code>. The public half is safe
 to share; Alice adds it as a <strong>recipient</strong>, and Sam can decrypt.</p>
@@ -476,6 +476,475 @@ to share; Alice adds it as a <strong>recipient</strong>, and Sam can decrypt.</p
 <div class="g-callout info" style="margin-top: 0.6rem;">
   <p>Like HTTPS: the <strong>public key</strong> can travel anywhere, only the
   <strong>private key</strong> — which never leaves the laptop — can decrypt.</p>
+</div>
+
+---
+layout: default
+---
+
+# The Flow
+
+<p>Everyone changes <code>.env.example</code> only. <code>.env</code> is never touched — it is just the <strong>decrypted result</strong>.</p>
+
+<div class="sc-wrap" style="aspect-ratio: 840 / 300">
+<div class="sc-layer">
+<svg class="sc-svg" viewBox="0 0 840 300" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
+<g class="sc-person sc-fill-blue"><circle cx="50" cy="40" r="14"/><path d="M24 92 Q24 60 50 60 Q76 60 76 92 Z"/></g>
+<g class="sc-person sc-fill-blue"><circle cx="130" cy="40" r="14"/><path d="M104 92 Q104 60 130 60 Q156 60 156 92 Z"/></g>
+</svg>
+<span class="sc-tx sc-center sc-b" style="left:5.95%;top:33.65%">Alice</span>
+<span class="sc-tx sc-center sc-b" style="left:15.48%;top:33.65%">Bob</span>
+<span class="sc-tx sc-center sc-sub" style="left:10.71%;top:46.74%">add · edit · update · delete</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 300" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s5-1-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M182 82 H290" marker-end="url(#s5-1-blue)"/>
+<rect class="sc-chip" x="181.8" y="55" width="108.5" height="18" rx="9"/>
+<rect class="sc-panel" x="300" y="10" width="215" height="144" rx="12"/>
+<path class="sc-thin sc-blue" style="stroke-width:1.8" d="M320 25 V37 M320 29 C320 35 330 32 330 37"/><circle class="sc-fill-blue" cx="320" cy="24" r="3.5"/><circle class="sc-fill-blue" cx="320" cy="38" r="3.5"/><circle class="sc-fill-blue" cx="330" cy="38" r="3.5"/>
+<rect class="sc-tint-blue" x="459" y="21" width="44" height="20" rx="10"/>
+<rect class="sc-nofill" x="314" y="68" width="187" height="74" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M314 94 V76 a8 8 0 0 1 8 -8 H493 a8 8 0 0 1 8 8 V94 Z"/>
+<path class="sc-thin sc-green" d="M314 94 H501"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="314" y="68" width="187" height="74" rx="8"/>
+<path class="sc-thin sc-green" d="M323 74 H331 L335 78 V88 H323 Z M331 74 V78 H335"/>
+</svg>
+<span class="sc-tx sc-center sc-chip-t" style="left:28.10%;top:19.69%">edit + git push</span>
+<span class="sc-tx sc-b" style="left:40.48%;top:8.32%">Git repo</span>
+<span class="sc-tx sc-center sc-mono sc-t-blue" style="left:57.26%;top:8.55%">main</span>
+<span class="sc-tx sc-sub sc-mono" style="left:37.62%;top:17.03%">src/   package.json   …</span>
+<span class="sc-tx sc-mono sc-b" style="left:40.60%;top:25.41%">.env.example</span>
+<span class="sc-tx sc-mono" style="left:38.57%;top:33.74%">API_KEY=ENC[AES…]</span>
+<span class="sc-tx sc-mono" style="left:38.57%;top:39.07%">DB_URL=ENC[AES…]</span>
+<span class="sc-tx sc-center sc-b sc-t-green" style="left:48.45%;top:54.98%">the single source of truth</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 300" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s5-2-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M527 82 H598" marker-end="url(#s5-2-blue)"/>
+<rect class="sc-chip" x="529.8" y="55" width="64.4" height="18" rx="9"/>
+<g class="sc-person sc-fill-yellow"><circle cx="640" cy="40" r="14"/><path d="M614 92 Q614 60 640 60 Q666 60 666 92 Z"/></g>
+<g class="sc-person sc-fill-yellow"><circle cx="775" cy="40" r="14"/><path d="M749 92 Q749 60 775 60 Q801 60 801 92 Z"/></g>
+</svg>
+<span class="sc-tx sc-center sc-chip-t" style="left:66.90%;top:19.69%">git pull</span>
+<span class="sc-tx sc-center sc-b" style="left:76.19%;top:33.65%">Sam</span>
+<span class="sc-tx sc-center sc-b" style="left:92.26%;top:33.65%">Bob</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 300" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s5-3-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-green" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-green" d="M640 124 V170" marker-end="url(#s5-3-green)"/>
+<rect class="sc-chip" x="595.2" y="138" width="89.6" height="18" rx="9"/>
+<rect class="sc-nofill" x="578" y="180" width="124" height="74" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M578 206 V188 a8 8 0 0 1 8 -8 H694 a8 8 0 0 1 8 8 V206 Z"/>
+<path class="sc-thin sc-green" d="M578 206 H702"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="578" y="180" width="124" height="74" rx="8"/>
+<path class="sc-thin sc-green" d="M587 186 H595 L599 190 V200 H587 Z M595 186 V190 H599"/>
+<path class="sc-arrow sc-green" d="M775 124 V170" marker-end="url(#s5-3-green)"/>
+<rect class="sc-chip" x="730.2" y="138" width="89.6" height="18" rx="9"/>
+<rect class="sc-nofill" x="713" y="180" width="124" height="74" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M713 206 V188 a8 8 0 0 1 8 -8 H829 a8 8 0 0 1 8 8 V206 Z"/>
+<path class="sc-thin sc-green" d="M713 206 H837"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="713" y="180" width="124" height="74" rx="8"/>
+<path class="sc-thin sc-green" d="M722 186 H730 L734 190 V200 H722 Z M730 186 V190 H734"/>
+</svg>
+<span class="sc-tx sc-center sc-chip-t" style="left:76.19%;top:47.36%">sops decrypt</span>
+<span class="sc-tx sc-mono sc-b" style="left:72.02%;top:62.74%">.env</span>
+<span class="sc-tx sc-mono" style="left:70.00%;top:71.08%">API_KEY=abc123</span>
+<span class="sc-tx sc-mono" style="left:70.00%;top:76.41%">DB_URL=pg://…</span>
+<span class="sc-tx sc-center sc-chip-t" style="left:92.26%;top:47.36%">sops decrypt</span>
+<span class="sc-tx sc-mono sc-b" style="left:88.10%;top:62.74%">.env</span>
+<span class="sc-tx sc-mono" style="left:86.07%;top:71.08%">API_KEY=abc123</span>
+<span class="sc-tx sc-mono" style="left:86.07%;top:76.41%">DB_URL=pg://…</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 300" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
+<rect class="sc-tint-green" x="10" y="196" width="270" height="40" rx="10"/><rect class="sc-nofill sc-green" style="stroke-width:1.8" x="10" y="196" width="270" height="40" rx="10"/>
+<rect class="sc-tint-red" x="10" y="248" width="270" height="40" rx="10"/><rect class="sc-nofill sc-red" style="stroke-width:1.8" x="10" y="248" width="270" height="40" rx="10"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-green" style="left:17.26%;top:69.98%">✓  change only .env.example</span>
+<span class="sc-tx sc-center sc-b sc-t-red" style="left:17.26%;top:87.32%">✗  never edit .env by hand</span>
+<span class="sc-tx sc-center sc-sub" style="left:76.19%;top:88.74%">a result, gitignored</span>
+</div>
+</div>
+
+<div class="g-callout success" style="margin-top: 0.6rem;">
+  <p>If your <code>.env</code> looks wrong, don't fix it — pull and <strong>decrypt again</strong>.</p>
+</div>
+
+---
+layout: default
+---
+
+# Flow · Adding a new team member
+
+<p>The new member shares only a <strong>public key</strong>. No <code>.env</code> is ever sent around.</p>
+
+<div class="sc-wrap" style="aspect-ratio: 840 / 290">
+<div class="sc-layer">
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
+<circle class="sc-fill-blue" cx="12" cy="18" r="12"/>
+<g class="sc-person sc-fill-blue"><circle cx="85" cy="70" r="14"/><path d="M59 122 Q59 90 85 90 Q111 90 111 122 Z"/></g>
+<rect class="sc-nofill" x="0" y="160" width="170" height="74" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-blue" d="M0 186 V168 a8 8 0 0 1 8 -8 H162 a8 8 0 0 1 8 8 V186 Z"/>
+<path class="sc-thin sc-blue" d="M0 186 H170"/>
+<rect class="sc-nofill sc-blue" style="stroke-width:1.8" x="0" y="160" width="170" height="74" rx="8"/>
+<path class="sc-thin sc-blue" d="M9 166 H17 L21 170 V180 H9 Z M17 166 V170 H21"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:1.43%;top:4.12%">1</span>
+<span class="sc-tx sc-b" style="left:3.81%;top:4.12%">Generate keys</span>
+<span class="sc-tx sc-mono sc-sub" style="left:3.81%;top:11.06%">age-keygen</span>
+<span class="sc-tx sc-center sc-b" style="left:10.12%;top:45.16%">Sam</span>
+<span class="sc-tx sc-mono sc-b" style="left:3.21%;top:58.01%">key pair</span>
+<span class="sc-tx sc-mono sc-t-green" style="left:1.19%;top:66.63%">age1sam7x… public</span>
+<span class="sc-tx sc-mono sc-t-red" style="left:1.19%;top:72.15%">AGE-SECRET-… private</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s6-1-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M178 106 H215" marker-end="url(#s6-1-blue)"/>
+<circle class="sc-fill-blue" cx="235" cy="18" r="12"/>
+<g class="sc-person sc-fill-yellow"><circle cx="308" cy="70" r="14"/><path d="M282 122 Q282 90 308 90 Q334 90 334 122 Z"/></g>
+<rect class="sc-tint-blue" x="223" y="160" width="170" height="58" rx="10"/><rect class="sc-nofill sc-blue" style="stroke-width:1.8" x="223" y="160" width="170" height="58" rx="10"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:27.98%;top:4.12%">2</span>
+<span class="sc-tx sc-b" style="left:30.36%;top:4.12%">Send public key</span>
+<span class="sc-tx sc-mono sc-sub" style="left:30.36%;top:11.06%">any channel</span>
+<span class="sc-tx sc-center sc-b" style="left:36.67%;top:45.16%">Alice</span>
+<span class="sc-tx sc-center sc-sub" style="left:36.67%;top:60.16%">"my public key:"</span>
+<span class="sc-tx sc-center sc-b sc-t-green" style="left:36.67%;top:66.02%">age1sam7x…</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s6-2-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M401 106 H438" marker-end="url(#s6-2-blue)"/>
+<circle class="sc-fill-blue" cx="458" cy="18" r="12"/>
+<g class="sc-person sc-fill-yellow"><circle cx="531" cy="70" r="14"/><path d="M505 122 Q505 90 531 90 Q557 90 557 122 Z"/></g>
+<rect class="sc-nofill" x="446" y="160" width="170" height="106" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-yellow" d="M446 186 V168 a8 8 0 0 1 8 -8 H608 a8 8 0 0 1 8 8 V186 Z"/>
+<path class="sc-thin sc-yellow" d="M446 186 H616"/>
+<rect class="sc-nofill sc-yellow" style="stroke-width:1.8" x="446" y="160" width="170" height="106" rx="8"/>
+<path class="sc-thin sc-yellow" d="M455 166 H463 L467 170 V180 H455 Z M463 166 V170 H467"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:54.52%;top:4.12%">3</span>
+<span class="sc-tx sc-b" style="left:56.90%;top:4.12%">Add recipient</span>
+<span class="sc-tx sc-mono sc-sub" style="left:56.90%;top:11.06%">sops updatekeys</span>
+<span class="sc-tx sc-center sc-b" style="left:63.21%;top:45.16%">Alice</span>
+<span class="sc-tx sc-mono sc-b" style="left:56.31%;top:58.01%">.sops.yaml</span>
+<span class="sc-tx sc-mono" style="left:54.29%;top:66.63%">age:</span>
+<span class="sc-tx sc-mono" style="left:54.29%;top:72.15%">  - age1alice…</span>
+<span class="sc-tx sc-mono" style="left:54.29%;top:77.66%">  - age1bob…</span>
+<span class="sc-tx sc-mono sc-t-green" style="left:54.29%;top:83.18%">  + age1sam7x…</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s6-3-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M624 106 H662" marker-end="url(#s6-3-blue)"/>
+<circle class="sc-fill-green" cx="682" cy="18" r="12"/>
+<g class="sc-person sc-fill-blue"><circle cx="755" cy="70" r="14"/><path d="M729 122 Q729 90 755 90 Q781 90 781 122 Z"/></g>
+<rect class="sc-nofill" x="670" y="160" width="170" height="90" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M670 186 V168 a8 8 0 0 1 8 -8 H832 a8 8 0 0 1 8 8 V186 Z"/>
+<path class="sc-thin sc-green" d="M670 186 H840"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="670" y="160" width="170" height="90" rx="8"/>
+<path class="sc-thin sc-green" d="M679 166 H687 L691 170 V180 H679 Z M687 166 V170 H691"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:81.19%;top:4.12%">4</span>
+<span class="sc-tx sc-b" style="left:83.57%;top:4.12%">Pull &amp; decrypt</span>
+<span class="sc-tx sc-mono sc-sub" style="left:83.57%;top:11.06%">sops decrypt</span>
+<span class="sc-tx sc-center sc-b" style="left:89.88%;top:45.16%">Sam</span>
+<span class="sc-tx sc-mono sc-b" style="left:82.98%;top:58.01%">.env</span>
+<span class="sc-tx sc-mono" style="left:80.95%;top:66.63%">API_KEY=abc123</span>
+<span class="sc-tx sc-mono" style="left:80.95%;top:72.15%">DB_URL=pg://…</span>
+<span class="sc-tx sc-mono sc-t-green" style="left:80.95%;top:77.66%">ready to run</span>
+</div>
+</div>
+
+<div class="g-callout info" style="margin-top: 0.6rem;">
+  <p>Only <strong>Alice</strong> needs to edit <code>.sops.yaml</code>; Sam's <strong>private key</strong> never leaves his laptop.</p>
+</div>
+
+---
+layout: default
+---
+
+# Flow · Add, edit or delete a key
+
+<p>Open the file with <code>sops edit</code>, change it like any text file, and save — <strong>encryption is automatic</strong>.</p>
+
+<div class="sc-wrap" style="aspect-ratio: 840 / 290">
+<div class="sc-layer">
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
+<circle class="sc-fill-blue" cx="12" cy="18" r="12"/>
+<g class="sc-person sc-fill-blue"><circle cx="85" cy="70" r="14"/><path d="M59 122 Q59 90 85 90 Q111 90 111 122 Z"/></g>
+<rect class="sc-nofill" x="0" y="160" width="170" height="90" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-blue" d="M0 186 V168 a8 8 0 0 1 8 -8 H162 a8 8 0 0 1 8 8 V186 Z"/>
+<path class="sc-thin sc-blue" d="M0 186 H170"/>
+<rect class="sc-nofill sc-blue" style="stroke-width:1.8" x="0" y="160" width="170" height="90" rx="8"/>
+<path class="sc-thin sc-blue" d="M9 166 H17 L21 170 V180 H9 Z M17 166 V170 H21"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:1.43%;top:4.12%">1</span>
+<span class="sc-tx sc-b" style="left:3.81%;top:4.12%">Open in editor</span>
+<span class="sc-tx sc-mono sc-sub" style="left:3.81%;top:11.06%">sops edit</span>
+<span class="sc-tx sc-center sc-b" style="left:10.12%;top:45.16%">Alice</span>
+<span class="sc-tx sc-mono sc-b" style="left:3.21%;top:58.01%">editor (plain)</span>
+<span class="sc-tx sc-mono sc-t-green" style="left:1.19%;top:66.63%">+ NEW_KEY=xyz789</span>
+<span class="sc-tx sc-mono sc-t-yellow" style="left:1.19%;top:72.15%">~ API_KEY=changed</span>
+<span class="sc-tx sc-mono sc-t-red" style="left:1.19%;top:77.66%">- OLD_KEY=gone</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s7-1-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M178 106 H215" marker-end="url(#s7-1-blue)"/>
+<circle class="sc-fill-green" cx="235" cy="18" r="12"/>
+<path class="sc-arrow sc-green" style="stroke-width:3" d="M301 78 V72 a7 7 0 0 1 14 0 V78"/><rect class="sc-fill-green" x="297" y="78" width="22" height="16" rx="3"/>
+<rect class="sc-nofill" x="223" y="160" width="170" height="90" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M223 186 V168 a8 8 0 0 1 8 -8 H385 a8 8 0 0 1 8 8 V186 Z"/>
+<path class="sc-thin sc-green" d="M223 186 H393"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="223" y="160" width="170" height="90" rx="8"/>
+<path class="sc-thin sc-green" d="M232 166 H240 L244 170 V180 H232 Z M240 166 V170 H244"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:27.98%;top:4.12%">2</span>
+<span class="sc-tx sc-b" style="left:30.36%;top:4.12%">Save = encrypt</span>
+<span class="sc-tx sc-mono sc-sub" style="left:30.36%;top:11.06%">automatic</span>
+<span class="sc-tx sc-center sc-b" style="left:36.67%;top:45.16%">sops encrypts</span>
+<span class="sc-tx sc-mono sc-b" style="left:29.76%;top:58.01%">.env.example</span>
+<span class="sc-tx sc-mono" style="left:27.74%;top:66.63%">NEW_KEY=ENC[…]</span>
+<span class="sc-tx sc-mono" style="left:27.74%;top:72.15%">API_KEY=ENC[…]</span>
+<span class="sc-tx sc-mono sc-t-red" style="left:27.74%;top:77.66%">OLD_KEY removed</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s7-2-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M401 106 H438" marker-end="url(#s7-2-blue)"/>
+<circle class="sc-fill-blue" cx="458" cy="18" r="12"/>
+<rect class="sc-panel" x="446" y="56" width="170" height="150" rx="12"/>
+<path class="sc-thin sc-blue" style="stroke-width:1.8" d="M466 71 V83 M466 75 C466 81 476 78 476 83"/><circle class="sc-fill-blue" cx="466" cy="70" r="3.5"/><circle class="sc-fill-blue" cx="466" cy="84" r="3.5"/><circle class="sc-fill-blue" cx="476" cy="84" r="3.5"/>
+<rect class="sc-tint-blue" x="560" y="67" width="44" height="20" rx="10"/>
+<rect class="sc-nofill" x="456" y="114" width="150" height="74" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M456 140 V122 a8 8 0 0 1 8 -8 H598 a8 8 0 0 1 8 8 V140 Z"/>
+<path class="sc-thin sc-green" d="M456 140 H606"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="456" y="114" width="150" height="74" rx="8"/>
+<path class="sc-thin sc-green" d="M465 120 H473 L477 124 V134 H465 Z M473 120 V124 H477"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:54.52%;top:4.12%">3</span>
+<span class="sc-tx sc-b" style="left:56.90%;top:4.12%">Commit &amp; push</span>
+<span class="sc-tx sc-mono sc-sub" style="left:56.90%;top:11.06%">git push</span>
+<span class="sc-tx sc-b" style="left:57.86%;top:24.47%">Git repo</span>
+<span class="sc-tx sc-center sc-mono sc-t-blue" style="left:69.29%;top:24.71%">main</span>
+<span class="sc-tx sc-sub sc-mono" style="left:55.00%;top:33.47%">src/   package.json   …</span>
+<span class="sc-tx sc-mono sc-b" style="left:57.50%;top:42.15%">.env.example</span>
+<span class="sc-tx sc-mono" style="left:55.48%;top:50.77%">NEW_KEY=ENC[…]</span>
+<span class="sc-tx sc-mono" style="left:55.48%;top:56.28%">API_KEY=ENC[…]</span>
+<span class="sc-tx sc-center sc-sub" style="left:63.21%;top:76.63%">diff shows only the</span>
+<span class="sc-tx sc-center sc-sub" style="left:63.21%;top:82.15%">changed lines</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s7-3-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M624 106 H662" marker-end="url(#s7-3-blue)"/>
+<circle class="sc-fill-green" cx="682" cy="18" r="12"/>
+<g class="sc-person sc-fill-yellow"><circle cx="755" cy="70" r="14"/><path d="M729 122 Q729 90 755 90 Q781 90 781 122 Z"/></g>
+<rect class="sc-nofill" x="670" y="160" width="170" height="90" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M670 186 V168 a8 8 0 0 1 8 -8 H832 a8 8 0 0 1 8 8 V186 Z"/>
+<path class="sc-thin sc-green" d="M670 186 H840"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="670" y="160" width="170" height="90" rx="8"/>
+<path class="sc-thin sc-green" d="M679 166 H687 L691 170 V180 H679 Z M687 166 V170 H691"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:81.19%;top:4.12%">4</span>
+<span class="sc-tx sc-b" style="left:83.57%;top:4.12%">Pull &amp; decrypt</span>
+<span class="sc-tx sc-mono sc-sub" style="left:83.57%;top:11.06%">sops decrypt</span>
+<span class="sc-tx sc-center sc-b" style="left:89.88%;top:45.16%">Bob</span>
+<span class="sc-tx sc-mono sc-b" style="left:82.98%;top:58.01%">.env</span>
+<span class="sc-tx sc-mono sc-t-green" style="left:80.95%;top:66.63%">+ NEW_KEY=xyz789</span>
+<span class="sc-tx sc-mono sc-t-yellow" style="left:80.95%;top:72.15%">~ API_KEY=changed</span>
+<span class="sc-tx sc-mono sc-t-red" style="left:80.95%;top:77.66%">- OLD_KEY gone</span>
+</div>
+</div>
+
+<div class="g-callout info" style="margin-top: 0.6rem;">
+  <p>Git history shows <strong>which key changed</strong> and who changed it — without exposing any value.</p>
+</div>
+
+---
+layout: default
+---
+
+# Flow · Someone leaves the team
+
+<p>Removing a <strong>recipient</strong> stops them decrypting <em>new</em> commits — but they may still hold old values.</p>
+
+<div class="sc-wrap" style="aspect-ratio: 840 / 290">
+<div class="sc-layer">
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
+<circle class="sc-fill-blue" cx="12" cy="18" r="12"/>
+<g class="sc-person sc-fill-blue"><circle cx="85" cy="70" r="14"/><path d="M59 122 Q59 90 85 90 Q111 90 111 122 Z"/></g>
+<rect class="sc-nofill" x="0" y="160" width="170" height="106" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-yellow" d="M0 186 V168 a8 8 0 0 1 8 -8 H162 a8 8 0 0 1 8 8 V186 Z"/>
+<path class="sc-thin sc-yellow" d="M0 186 H170"/>
+<rect class="sc-nofill sc-yellow" style="stroke-width:1.8" x="0" y="160" width="170" height="106" rx="8"/>
+<path class="sc-thin sc-yellow" d="M9 166 H17 L21 170 V180 H9 Z M17 166 V170 H21"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:1.43%;top:4.12%">1</span>
+<span class="sc-tx sc-b" style="left:3.81%;top:4.12%">Remove recipient</span>
+<span class="sc-tx sc-mono sc-sub" style="left:3.81%;top:11.06%">.sops.yaml</span>
+<span class="sc-tx sc-center sc-b" style="left:10.12%;top:45.16%">Alice</span>
+<span class="sc-tx sc-mono sc-b" style="left:3.21%;top:58.01%">.sops.yaml</span>
+<span class="sc-tx sc-mono" style="left:1.19%;top:66.63%">age:</span>
+<span class="sc-tx sc-mono" style="left:1.19%;top:72.15%">  - age1alice…</span>
+<span class="sc-tx sc-mono" style="left:1.19%;top:77.66%">  - age1bob…</span>
+<span class="sc-tx sc-mono sc-t-red" style="left:1.19%;top:83.18%">  - age1eve9z…  ✗</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s8-1-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M178 106 H215" marker-end="url(#s8-1-blue)"/>
+<circle class="sc-fill-blue" cx="235" cy="18" r="12"/>
+<g class="sc-person sc-fill-red"><circle cx="308" cy="70" r="14"/><path d="M282 122 Q282 90 308 90 Q334 90 334 122 Z"/></g>
+<circle class="sc-fill-red" cx="351" cy="66" r="10"/><path d="M347 62 L355 70 M355 62 L347 70" style="stroke:var(--g-bg)" stroke-width="2.2" stroke-linecap="round"/>
+<rect class="sc-nofill" x="223" y="160" width="170" height="90" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M223 186 V168 a8 8 0 0 1 8 -8 H385 a8 8 0 0 1 8 8 V186 Z"/>
+<path class="sc-thin sc-green" d="M223 186 H393"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="223" y="160" width="170" height="90" rx="8"/>
+<path class="sc-thin sc-green" d="M232 166 H240 L244 170 V180 H232 Z M240 166 V170 H244"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:27.98%;top:4.12%">2</span>
+<span class="sc-tx sc-b" style="left:30.36%;top:4.12%">Re-wrap &amp; rotate</span>
+<span class="sc-tx sc-mono sc-sub" style="left:30.36%;top:11.06%">updatekeys + rotate</span>
+<span class="sc-tx sc-center sc-b" style="left:36.67%;top:45.16%">Eve (left)</span>
+<span class="sc-tx sc-mono sc-b" style="left:29.76%;top:58.01%">.env.example</span>
+<span class="sc-tx sc-mono" style="left:27.74%;top:66.63%">new data key</span>
+<span class="sc-tx sc-mono sc-t-green" style="left:27.74%;top:72.15%">for: Alice + Bob</span>
+<span class="sc-tx sc-mono sc-t-red" style="left:27.74%;top:77.66%">Eve: no access</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s8-2-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M401 106 H438" marker-end="url(#s8-2-blue)"/>
+<circle class="sc-fill-blue" cx="458" cy="18" r="12"/>
+<rect class="sc-panel" x="446" y="56" width="170" height="150" rx="12"/>
+<path class="sc-thin sc-blue" style="stroke-width:1.8" d="M466 71 V83 M466 75 C466 81 476 78 476 83"/><circle class="sc-fill-blue" cx="466" cy="70" r="3.5"/><circle class="sc-fill-blue" cx="466" cy="84" r="3.5"/><circle class="sc-fill-blue" cx="476" cy="84" r="3.5"/>
+<rect class="sc-tint-blue" x="560" y="67" width="44" height="20" rx="10"/>
+<rect class="sc-nofill" x="456" y="114" width="150" height="74" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M456 140 V122 a8 8 0 0 1 8 -8 H598 a8 8 0 0 1 8 8 V140 Z"/>
+<path class="sc-thin sc-green" d="M456 140 H606"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="456" y="114" width="150" height="74" rx="8"/>
+<path class="sc-thin sc-green" d="M465 120 H473 L477 124 V134 H465 Z M473 120 V124 H477"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:54.52%;top:4.12%">3</span>
+<span class="sc-tx sc-b" style="left:56.90%;top:4.12%">Commit &amp; push</span>
+<span class="sc-tx sc-mono sc-sub" style="left:56.90%;top:11.06%">git push</span>
+<span class="sc-tx sc-b" style="left:57.86%;top:24.47%">Git repo</span>
+<span class="sc-tx sc-center sc-mono sc-t-blue" style="left:69.29%;top:24.71%">main</span>
+<span class="sc-tx sc-sub sc-mono" style="left:55.00%;top:33.47%">src/   package.json   …</span>
+<span class="sc-tx sc-mono sc-b" style="left:57.50%;top:42.15%">.env.example</span>
+<span class="sc-tx sc-mono" style="left:55.48%;top:50.77%">API_KEY=ENC[…]</span>
+<span class="sc-tx sc-mono" style="left:55.48%;top:56.28%">DB_URL=ENC[…]</span>
+<span class="sc-tx sc-center sc-sub" style="left:63.21%;top:76.63%">only Alice + Bob</span>
+<span class="sc-tx sc-center sc-sub" style="left:63.21%;top:82.15%">can decrypt now</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s8-3-yellow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-yellow" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-yellow" d="M624 106 H662" marker-end="url(#s8-3-yellow)"/>
+<circle class="sc-fill-yellow" cx="682" cy="18" r="12"/>
+<g class="sc-person sc-fill-blue"><circle cx="755" cy="70" r="14"/><path d="M729 122 Q729 90 755 90 Q781 90 781 122 Z"/></g>
+<rect class="sc-tint-yellow" x="670" y="160" width="170" height="86" rx="10"/><rect class="sc-nofill sc-yellow" style="stroke-width:1.8" x="670" y="160" width="170" height="86" rx="10"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:81.19%;top:4.12%">4</span>
+<span class="sc-tx sc-b" style="left:83.57%;top:4.12%">Rotate real secrets</span>
+<span class="sc-tx sc-mono sc-sub" style="left:83.57%;top:11.06%">at the provider</span>
+<span class="sc-tx sc-center sc-b" style="left:89.88%;top:45.16%">Alice</span>
+<span class="sc-tx sc-center sc-b" style="left:89.88%;top:62.05%">Eve saw the old values</span>
+<span class="sc-tx sc-center sc-sub" style="left:89.88%;top:67.91%">change DB password,</span>
+<span class="sc-tx sc-center sc-sub" style="left:89.88%;top:73.78%">API keys at the source</span>
+</div>
+</div>
+
+<div class="g-callout danger" style="margin-top: 0.6rem;">
+  <p>Always <strong>rotate the real credentials</strong>: the old ciphertext stays in git history.</p>
+</div>
+
+---
+layout: default
+---
+
+# Flow · Rotating the data key
+
+<p><code>sops rotate</code> swaps the <strong>data key</strong> and re-encrypts every value — same recipients, same plain values.</p>
+
+<div class="sc-wrap" style="aspect-ratio: 840 / 290">
+<div class="sc-layer">
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
+<circle class="sc-fill-blue" cx="12" cy="18" r="12"/>
+<g class="sc-person sc-fill-blue"><circle cx="85" cy="70" r="14"/><path d="M59 122 Q59 90 85 90 Q111 90 111 122 Z"/></g>
+<rect class="sc-nofill" x="0" y="160" width="170" height="90" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-red" d="M0 186 V168 a8 8 0 0 1 8 -8 H162 a8 8 0 0 1 8 8 V186 Z"/>
+<path class="sc-thin sc-red" d="M0 186 H170"/>
+<rect class="sc-nofill sc-red" style="stroke-width:1.8" x="0" y="160" width="170" height="90" rx="8"/>
+<path class="sc-thin sc-red" d="M9 166 H17 L21 170 V180 H9 Z M17 166 V170 H21"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:1.43%;top:4.12%">1</span>
+<span class="sc-tx sc-b" style="left:3.81%;top:4.12%">Run rotate</span>
+<span class="sc-tx sc-mono sc-sub" style="left:3.81%;top:11.06%">sops rotate -i</span>
+<span class="sc-tx sc-center sc-b" style="left:10.12%;top:45.16%">Alice</span>
+<span class="sc-tx sc-mono sc-b" style="left:3.21%;top:58.01%">before</span>
+<span class="sc-tx sc-mono" style="left:1.19%;top:66.63%">API_KEY=ENC[…a1f]</span>
+<span class="sc-tx sc-mono" style="left:1.19%;top:72.15%">DB_URL=ENC[…9c2]</span>
+<span class="sc-tx sc-mono sc-t-red" style="left:1.19%;top:77.66%">data key v1</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s9-1-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker><marker id="s9-1-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-green" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M178 106 H215" marker-end="url(#s9-1-blue)"/>
+<circle class="sc-fill-green" cx="235" cy="18" r="12"/>
+<circle class="sc-arrow sc-red" style="stroke-width:2.6" cx="245" cy="76" r="7"/><path class="sc-arrow sc-red" style="stroke-width:2.6" d="M252 76 H279 M271 76 V83 M278 76 V82"/>
+<path class="sc-arrow sc-green" d="M291 76 H321" marker-end="url(#s9-1-green)"/>
+<circle class="sc-arrow sc-green" style="stroke-width:2.6" cx="337" cy="76" r="7"/><path class="sc-arrow sc-green" style="stroke-width:2.6" d="M344 76 H371 M363 76 V83 M370 76 V82"/>
+<rect class="sc-tint-green" x="223" y="160" width="170" height="58" rx="10"/><rect class="sc-nofill sc-green" style="stroke-width:1.8" x="223" y="160" width="170" height="58" rx="10"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:27.98%;top:4.12%">2</span>
+<span class="sc-tx sc-b" style="left:30.36%;top:4.12%">New data key</span>
+<span class="sc-tx sc-mono sc-sub" style="left:30.36%;top:11.06%">random, automatic</span>
+<span class="sc-tx sc-center sc-sub" style="left:29.17%;top:32.49%">v1</span>
+<span class="sc-tx sc-center sc-sub" style="left:40.12%;top:32.49%">v2</span>
+<span class="sc-tx sc-center sc-b" style="left:36.67%;top:45.16%">data key</span>
+<span class="sc-tx sc-center sc-sub" style="left:36.67%;top:60.16%">re-wrapped for</span>
+<span class="sc-tx sc-center sc-b" style="left:36.67%;top:66.02%">Alice + Bob</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s9-2-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M401 106 H438" marker-end="url(#s9-2-blue)"/>
+<circle class="sc-fill-green" cx="458" cy="18" r="12"/>
+<path class="sc-arrow sc-green" style="stroke-width:3" d="M524 78 V72 a7 7 0 0 1 14 0 V78"/><rect class="sc-fill-green" x="520" y="78" width="22" height="16" rx="3"/>
+<rect class="sc-nofill" x="446" y="160" width="170" height="90" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M446 186 V168 a8 8 0 0 1 8 -8 H608 a8 8 0 0 1 8 8 V186 Z"/>
+<path class="sc-thin sc-green" d="M446 186 H616"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="446" y="160" width="170" height="90" rx="8"/>
+<path class="sc-thin sc-green" d="M455 166 H463 L467 170 V180 H455 Z M463 166 V170 H467"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:54.52%;top:4.12%">3</span>
+<span class="sc-tx sc-b" style="left:56.90%;top:4.12%">Values re-encrypted</span>
+<span class="sc-tx sc-mono sc-sub" style="left:56.90%;top:11.06%">same values</span>
+<span class="sc-tx sc-center sc-b" style="left:63.21%;top:45.16%">new ciphertext</span>
+<span class="sc-tx sc-mono sc-b" style="left:56.31%;top:58.01%">after</span>
+<span class="sc-tx sc-mono" style="left:54.29%;top:66.63%">API_KEY=ENC[…7be]</span>
+<span class="sc-tx sc-mono" style="left:54.29%;top:72.15%">DB_URL=ENC[…e40]</span>
+<span class="sc-tx sc-mono sc-t-green" style="left:54.29%;top:77.66%">data key v2</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s9-3-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M624 106 H662" marker-end="url(#s9-3-blue)"/>
+<circle class="sc-fill-green" cx="682" cy="18" r="12"/>
+<g class="sc-person sc-fill-yellow"><circle cx="715" cy="70" r="14"/><path d="M689 122 Q689 90 715 90 Q741 90 741 122 Z"/></g>
+<g class="sc-person sc-fill-yellow"><circle cx="795" cy="70" r="14"/><path d="M769 122 Q769 90 795 90 Q821 90 821 122 Z"/></g>
+<rect class="sc-nofill" x="670" y="160" width="170" height="74" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M670 186 V168 a8 8 0 0 1 8 -8 H832 a8 8 0 0 1 8 8 V186 Z"/>
+<path class="sc-thin sc-green" d="M670 186 H840"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="670" y="160" width="170" height="74" rx="8"/>
+<path class="sc-thin sc-green" d="M679 166 H687 L691 170 V180 H679 Z M687 166 V170 H691"/>
+<circle class="sc-fill-green" cx="755" cy="122" r="10"/><path d="M750.5 122 L754 125.5 L760 118.5" fill="none" style="stroke:var(--g-bg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-bg" style="left:81.19%;top:4.12%">4</span>
+<span class="sc-tx sc-b" style="left:83.57%;top:4.12%">Same access</span>
+<span class="sc-tx sc-mono sc-sub" style="left:83.57%;top:11.06%">nothing else changes</span>
+<span class="sc-tx sc-center sc-b" style="left:85.12%;top:45.16%">Alice</span>
+<span class="sc-tx sc-center sc-b" style="left:94.64%;top:45.16%">Bob</span>
+<span class="sc-tx sc-mono sc-b" style="left:82.98%;top:58.01%">.env</span>
+<span class="sc-tx sc-mono" style="left:80.95%;top:66.63%">same plain values</span>
+<span class="sc-tx sc-mono sc-t-green" style="left:80.95%;top:72.15%">same recipients</span>
+</div>
+</div>
+
+<div class="g-callout success" style="margin-top: 0.6rem;">
+  <p>Do it on a schedule, or when a key may have leaked. Nobody has to re-share anything.</p>
 </div>
 
 ---
