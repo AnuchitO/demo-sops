@@ -651,7 +651,7 @@ html.dark .dk-node {
 .sc-layer { position: absolute; inset: 0; }
 .sc-layer .sc-svg { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; }
 .sc-tx {
-  position: absolute; white-space: nowrap; line-height: 1;
+  position: absolute; white-space: pre; line-height: 1;
   font-size: calc(13 / 840 * 100cqw); color: var(--g-text);
 }
 .sc-tx.sc-mono { font-family: 'Fira Code', monospace; font-size: calc(11.5 / 840 * 100cqw); }
@@ -693,3 +693,7 @@ html.dark .dk-node {
 .sc-svg .sc-fill-bg { fill: var(--g-bg); }
 .sc-tx.sc-t-bg { color: var(--g-bg); }
 .sc-tx.sc-big { font-size: calc(40 / 840 * 100cqw); font-weight: 700; }
+:root { --g-term-text: #d4d4d4; --g-term-dim: #8a8f98; }
+.sc-svg .sc-term { fill: var(--g-code-bg); stroke: var(--g-border); stroke-width: 1.5; }
+.sc-tx.sc-term-t { color: var(--g-term-text); }
+.sc-tx.sc-term-dim { color: var(--g-term-dim); }
