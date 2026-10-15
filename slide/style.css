@@ -692,3 +692,4 @@ html.dark .dk-node {
 @keyframes sc-flow { to { stroke-dashoffset: -22; } }
 .sc-svg .sc-fill-bg { fill: var(--g-bg); }
 .sc-tx.sc-t-bg { color: var(--g-bg); }
+.sc-tx.sc-big { font-size: calc(40 / 840 * 100cqw); font-weight: 700; }
