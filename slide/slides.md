@@ -100,7 +100,7 @@ layout: default
 <p>Sam joins, clones the repo and runs it — but <strong>there is no <code>.env</code></strong>.
 Git only has <code>.env.example</code>: the keys, none of the values.</p>
 
-<div class="sc-wrap">
+<div class="sc-wrap" style="aspect-ratio: 840 / 290">
 <div class="sc-layer">
 <svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
 <rect class="sc-panel" x="10" y="10" width="215" height="160" rx="12"/>
@@ -197,7 +197,7 @@ layout: default
 <p>Everyone is in sync. Then one teammate adds a <strong>new required key</strong>
 and pushes the code — without telling the team.</p>
 
-<div class="sc-wrap">
+<div class="sc-wrap" style="aspect-ratio: 840 / 290">
 <div class="sc-layer">
 <svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
 <g class="sc-person sc-fill-blue"><circle cx="60" cy="40" r="14"/><path d="M34 92 Q34 60 60 60 Q86 60 86 92 Z"/></g>
@@ -291,7 +291,7 @@ layout: default
 <p>What if the file in git <strong>held the real values — encrypted</strong>?
 Change it, commit, push. Teammates just decrypt it into <code>.env</code>.</p>
 
-<div class="sc-wrap">
+<div class="sc-wrap" style="aspect-ratio: 840 / 290">
 <div class="sc-layer">
 <svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
 <g class="sc-person sc-fill-blue"><circle cx="60" cy="40" r="14"/><path d="M34 92 Q34 60 60 60 Q86 60 86 92 Z"/></g>
@@ -379,6 +379,103 @@ Change it, commit, push. Teammates just decrypt it into <code>.env</code>.</p>
 <div class="g-callout success" style="margin-top: 0.6rem;">
   <p>One source of truth in git, no chat needed — <strong>SOPS</strong> to the
   rescue. Next slides call the encrypted file <code>.enc.env</code>.</p>
+</div>
+
+---
+layout: default
+---
+
+# Scenario 4 · Every teammate has their own key
+
+<p>Sam makes a <strong>key pair</strong> with <code>age-keygen</code>. The public half is safe
+to share; Alice adds it as a <strong>recipient</strong>, and Sam can decrypt.</p>
+
+<div class="sc-wrap" style="aspect-ratio: 840 / 310">
+<div class="sc-layer">
+<svg class="sc-svg" viewBox="0 0 840 310" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
+<g class="sc-person sc-fill-blue"><circle cx="60" cy="30" r="14"/><path d="M34 82 Q34 50 60 50 Q86 50 86 82 Z"/></g>
+<rect class="sc-nofill" x="10" y="146" width="160" height="58" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-red" d="M10 172 V154 a8 8 0 0 1 8 -8 H162 a8 8 0 0 1 8 8 V172 Z"/>
+<path class="sc-thin sc-red" d="M10 172 H170"/>
+<rect class="sc-nofill sc-red" style="stroke-width:1.8" x="10" y="146" width="160" height="58" rx="8"/>
+<path class="sc-thin sc-red" d="M19 152 H27 L31 156 V166 H19 Z M27 152 V156 H31"/>
+</svg>
+<span class="sc-tx sc-center sc-b" style="left:7.14%;top:29.34%">Sam</span>
+<span class="sc-tx sc-center sc-sub" style="left:7.14%;top:34.91%">runs age-keygen</span>
+<span class="sc-tx sc-mono sc-b" style="left:4.40%;top:49.75%">private.key</span>
+<span class="sc-tx sc-mono sc-t-red" style="left:2.38%;top:57.81%">AGE-SECRET-KEY-…</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 310" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s4-1-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<g class="sc-person sc-fill-yellow"><circle cx="780" cy="30" r="14"/><path d="M754 82 Q754 50 780 50 Q806 50 806 82 Z"/></g>
+<path class="sc-arrow sc-blue" d="M98 66 H742" marker-end="url(#s4-1-blue)"/>
+<rect class="sc-chip" x="343.7" y="57" width="152.6" height="18" rx="9"/>
+</svg>
+<span class="sc-tx sc-center sc-b" style="left:92.86%;top:29.34%">Alice</span>
+<span class="sc-tx sc-center sc-chip-t" style="left:50.00%;top:19.70%">public key: age1sam7x…</span>
+<span class="sc-tx sc-center sc-sub" style="left:50.00%;top:27.81%">safe to send over any channel — chat, email, PR</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 310" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s4-2-yellow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-yellow" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-yellow" d="M780 112 V140" marker-end="url(#s4-2-yellow)"/>
+<rect class="sc-nofill" x="655" y="146" width="180" height="90" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-yellow" d="M655 172 V154 a8 8 0 0 1 8 -8 H827 a8 8 0 0 1 8 8 V172 Z"/>
+<path class="sc-thin sc-yellow" d="M655 172 H835"/>
+<rect class="sc-nofill sc-yellow" style="stroke-width:1.8" x="655" y="146" width="180" height="90" rx="8"/>
+<path class="sc-thin sc-yellow" d="M664 152 H672 L676 156 V166 H664 Z M672 152 V156 H676"/>
+</svg>
+<span class="sc-tx sc-mono sc-b" style="left:81.19%;top:49.75%">.sops.yaml</span>
+<span class="sc-tx sc-mono" style="left:79.17%;top:57.81%">age:</span>
+<span class="sc-tx sc-mono" style="left:79.17%;top:62.98%">  - age1alice…</span>
+<span class="sc-tx sc-mono sc-t-green" style="left:79.17%;top:68.14%">  + age1sam7x…</span>
+<span class="sc-tx sc-sub" style="left:77.98%;top:81.36%">Alice adds Sam</span>
+<span class="sc-tx sc-sub" style="left:77.98%;top:86.52%">as a recipient</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 310" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s4-3-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<rect class="sc-panel" x="290" y="142" width="215" height="144" rx="12"/>
+<path class="sc-thin sc-blue" style="stroke-width:1.8" d="M310 157 V169 M310 161 C310 167 320 164 320 169"/><circle class="sc-fill-blue" cx="310" cy="156" r="3.5"/><circle class="sc-fill-blue" cx="310" cy="170" r="3.5"/><circle class="sc-fill-blue" cx="320" cy="170" r="3.5"/>
+<rect class="sc-tint-blue" x="449" y="153" width="44" height="20" rx="10"/>
+<rect class="sc-nofill" x="304" y="200" width="187" height="74" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M304 226 V208 a8 8 0 0 1 8 -8 H483 a8 8 0 0 1 8 8 V226 Z"/>
+<path class="sc-thin sc-green" d="M304 226 H491"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="304" y="200" width="187" height="74" rx="8"/>
+<path class="sc-thin sc-green" d="M313 206 H321 L325 210 V220 H313 Z M321 206 V210 H325"/>
+<path class="sc-arrow sc-blue" d="M645 200 H517" marker-end="url(#s4-3-blue)"/>
+<rect class="sc-chip" x="520.5" y="171" width="121.1" height="18" rx="9"/>
+</svg>
+<span class="sc-tx sc-b" style="left:39.29%;top:50.63%">Git repo</span>
+<span class="sc-tx sc-center sc-mono sc-t-blue" style="left:56.07%;top:50.85%">main</span>
+<span class="sc-tx sc-sub sc-mono" style="left:36.43%;top:59.06%">src/   package.json   …</span>
+<span class="sc-tx sc-mono sc-b" style="left:39.40%;top:67.17%">.env.example</span>
+<span class="sc-tx sc-mono" style="left:37.38%;top:75.23%">API_KEY=ENC[AES…]</span>
+<span class="sc-tx sc-mono sc-t-green" style="left:37.38%;top:80.40%">for: Alice + Sam</span>
+<span class="sc-tx sc-center sc-chip-t" style="left:69.17%;top:56.48%">updatekeys + push</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 310" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s4-4-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker><marker id="s4-4-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-green" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M280 175 H182" marker-end="url(#s4-4-blue)"/>
+<rect class="sc-chip" x="198.8" y="166" width="64.4" height="18" rx="9"/>
+<path class="sc-arrow sc-green" d="M90 210 V240" marker-end="url(#s4-4-green)"/>
+<rect class="sc-chip" x="103.2" y="216" width="89.6" height="18" rx="9"/>
+<rect class="sc-nofill" x="10" y="246" width="160" height="58" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M10 272 V254 a8 8 0 0 1 8 -8 H162 a8 8 0 0 1 8 8 V272 Z"/>
+<path class="sc-thin sc-green" d="M10 272 H170"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="10" y="246" width="160" height="58" rx="8"/>
+<path class="sc-thin sc-green" d="M19 252 H27 L31 256 V266 H19 Z M27 252 V256 H31"/>
+<circle class="sc-fill-green" cx="188" cy="275" r="10"/><path d="M183.5 275 L187 278.5 L193 271.5" fill="none" style="stroke:var(--g-bg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+<span class="sc-tx sc-center sc-chip-t" style="left:27.50%;top:54.86%">git pull</span>
+<span class="sc-tx sc-center sc-chip-t" style="left:17.62%;top:70.99%">sops decrypt</span>
+<span class="sc-tx sc-mono sc-b" style="left:4.40%;top:82.01%">.env</span>
+<span class="sc-tx sc-mono sc-t-green" style="left:2.38%;top:90.07%">API_KEY=abc123</span>
+<span class="sc-tx sc-b" style="left:24.29%;top:86.76%">ready</span>
+</div>
+</div>
+
+<div class="g-callout info" style="margin-top: 0.6rem;">
+  <p>Like HTTPS: the <strong>public key</strong> can travel anywhere, only the
+  <strong>private key</strong> — which never leaves the laptop — can decrypt.</p>
 </div>
 
 ---
