@@ -95,158 +95,290 @@ layout: default
 layout: default
 ---
 
-# Scenario 1 · The new teammate can't start the project
+# Scenario 1 · The new teammate is stuck
 
-<p>🧑‍💻 Sam joins the team, clones the repo, and runs it — but <strong>there is no <code>.env</code></strong>.
-Git only has <code>.env.example</code>: keys, no values.</p>
+<p>Sam joins, clones the repo and runs it — but <strong>there is no <code>.env</code></strong>.
+Git only has <code>.env.example</code>: the keys, none of the values.</p>
 
-<div class="dp-diagram">
-  <div class="dp-step">
-    <div class="dp-icon dp-icon-blue">🧑‍💻</div>
-    <div class="dp-label">Sam (new)</div>
-    <div class="dp-sub">clones the repo</div>
-  </div>
-  <div class="dp-connector">
-    <span class="dp-connector-line"></span>
-    <span class="dp-connector-chip">npm start</span>
-  </div>
-  <div class="dp-step">
-    <div class="dp-icon dp-icon-red">💥</div>
-    <div class="dp-label">missing <code>.env</code></div>
-    <div class="dp-sub">only keys, no values</div>
-  </div>
-  <div class="dp-connector">
-    <span class="dp-connector-line"></span>
-    <span class="dp-connector-chip">"can you send it?"</span>
-  </div>
-  <div class="dp-step">
-    <div class="dp-icon dp-icon-yellow">💬</div>
-    <div class="dp-label">LINE / Teams chat</div>
-    <div class="dp-sub">paste the whole file</div>
-  </div>
-  <div class="dp-connector">
-    <span class="dp-connector-line"></span>
-    <span class="dp-connector-chip">copy &amp; paste</span>
-  </div>
-  <div class="dp-step">
-    <div class="dp-icon dp-icon-red">🔓</div>
-    <div class="dp-label">secrets in chat history</div>
-    <div class="dp-sub">searchable, forwardable</div>
-  </div>
+<div class="sc-wrap">
+<div class="sc-layer">
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
+<rect class="sc-panel" x="10" y="10" width="215" height="160" rx="12"/>
+<path class="sc-thin sc-blue" style="stroke-width:1.8" d="M30 25 V37 M30 29 C30 35 40 32 40 37"/><circle class="sc-fill-blue" cx="30" cy="24" r="3.5"/><circle class="sc-fill-blue" cx="30" cy="38" r="3.5"/><circle class="sc-fill-blue" cx="40" cy="38" r="3.5"/>
+<rect class="sc-tint-blue" x="169" y="21" width="44" height="20" rx="10"/>
+<rect class="sc-nofill" x="24" y="68" width="187" height="90" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-blue" d="M24 94 V76 a8 8 0 0 1 8 -8 H203 a8 8 0 0 1 8 8 V94 Z"/>
+<path class="sc-thin sc-blue" d="M24 94 H211"/>
+<rect class="sc-nofill sc-blue" style="stroke-width:1.8" x="24" y="68" width="187" height="90" rx="8"/>
+<path class="sc-thin sc-blue" d="M33 74 H41 L45 78 V88 H33 Z M41 74 V78 H45"/>
+<g class="sc-person sc-fill-blue"><circle cx="355" cy="40" r="14"/><path d="M329 92 Q329 60 355 60 Q381 60 381 92 Z"/></g>
+</svg>
+<span class="sc-tx sc-b" style="left:5.95%;top:8.60%">Git repo</span>
+<span class="sc-tx sc-center sc-mono sc-t-blue" style="left:22.74%;top:8.84%">main</span>
+<span class="sc-tx sc-sub sc-mono" style="left:3.10%;top:17.61%">src/   package.json   …</span>
+<span class="sc-tx sc-mono sc-b" style="left:6.07%;top:26.28%">.env.example</span>
+<span class="sc-tx sc-mono" style="left:4.05%;top:34.91%">DB_PASSWORD=</span>
+<span class="sc-tx sc-mono" style="left:4.05%;top:40.42%">API_KEY=</span>
+<span class="sc-tx sc-mono sc-t-red" style="left:4.05%;top:45.94%">keys only, no values</span>
+<span class="sc-tx sc-center sc-b" style="left:42.26%;top:34.81%">Sam</span>
+<span class="sc-tx sc-center sc-sub" style="left:42.26%;top:40.77%">new teammate</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s1-1-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M235 80 H318" marker-end="url(#s1-1-blue)"/>
+<rect class="sc-chip" x="241.7" y="53" width="70.7" height="18" rx="9"/>
+<rect class="sc-tint-red" x="280" y="150" width="150" height="46" rx="10"/><rect class="sc-nofill sc-red" style="stroke-width:1.8" x="280" y="150" width="150" height="46" rx="10"/>
+</svg>
+<span class="sc-tx sc-center sc-chip-t" style="left:32.98%;top:19.68%">git clone</span>
+<span class="sc-tx sc-center sc-b sc-t-red" style="left:42.26%;top:54.64%">.env is missing</span>
+<span class="sc-tx sc-center " style="left:42.26%;top:60.50%">app won't start</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s1-2-yellow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-yellow" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<g class="sc-person sc-fill-yellow"><circle cx="785" cy="40" r="14"/><path d="M759 92 Q759 60 785 60 Q811 60 811 92 Z"/></g>
+<rect class="sc-nofill" x="545" y="30" width="170" height="90" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-yellow" d="M545 56 V38 a8 8 0 0 1 8 -8 H707 a8 8 0 0 1 8 8 V56 Z"/>
+<path class="sc-thin sc-yellow" d="M545 56 H715"/>
+<rect class="sc-nofill sc-yellow" style="stroke-width:1.8" x="545" y="30" width="170" height="90" rx="8"/>
+<path class="sc-thin sc-yellow" d="M554 36 H562 L566 40 V50 H554 Z M562 36 V40 H566"/>
+<path class="sc-arrow sc-yellow sc-dash" d="M392 70 H533" marker-end="url(#s1-2-yellow)"/>
+<rect class="sc-chip" x="382.6" y="41" width="158.9" height="18" rx="9"/>
+</svg>
+<span class="sc-tx sc-center sc-b" style="left:93.45%;top:34.81%">Alice</span>
+<span class="sc-tx sc-center sc-sub" style="left:93.45%;top:40.77%">existing teammate</span>
+<span class="sc-tx sc-mono sc-b" style="left:68.10%;top:13.18%">.env</span>
+<span class="sc-tx sc-mono" style="left:66.07%;top:21.80%">DB_PASSWORD=s3cr3t</span>
+<span class="sc-tx sc-mono" style="left:66.07%;top:27.32%">API_KEY=sk_live_9f</span>
+<span class="sc-tx sc-mono sc-t-green" style="left:66.07%;top:32.84%">the real values</span>
+<span class="sc-tx sc-center sc-chip-t" style="left:55.00%;top:15.54%">"can you send me .env?"</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s1-3-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-red" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<rect class="sc-nofill" x="14" y="214" width="190" height="58" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-yellow" d="M14 240 V222 a8 8 0 0 1 8 -8 H196 a8 8 0 0 1 8 8 V240 Z"/>
+<path class="sc-thin sc-yellow" d="M14 240 H204"/>
+<rect class="sc-nofill sc-yellow" style="stroke-width:1.8" x="14" y="214" width="190" height="58" rx="8"/>
+<path class="sc-thin sc-yellow" d="M23 220 H31 L35 224 V234 H23 Z M31 220 V224 H35"/>
+<path class="sc-arrow sc-red sc-dash" d="M109 208 V176" marker-end="url(#s1-3-red)"/>
+<circle class="sc-fill-red" cx="109" cy="192" r="10"/><path d="M105 188 L113 196 M113 188 L105 196" style="stroke:var(--g-bg)" stroke-width="2.2" stroke-linecap="round"/>
+</svg>
+<span class="sc-tx sc-mono sc-b" style="left:4.88%;top:76.63%">.env</span>
+<span class="sc-tx sc-mono" style="left:2.86%;top:85.25%">DB_PASSWORD=s3cr3t</span>
+<span class="sc-tx sc-sub" style="left:25.71%;top:79.39%">real secrets can't</span>
+<span class="sc-tx sc-sub" style="left:25.71%;top:84.91%">be pushed to git</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s1-4-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-red" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<rect class="sc-tint-red" x="500" y="200" width="230" height="72" rx="10"/><rect class="sc-nofill sc-red" style="stroke-width:1.8" x="500" y="200" width="230" height="72" rx="10"/>
+<path class="sc-arrow sc-red sc-dash" d="M640 128 V188" marker-end="url(#s1-4-red)"/>
+<rect class="sc-chip" x="671.2" y="149" width="89.6" height="18" rx="9"/>
+<path class="sc-arrow sc-red sc-dash" d="M490 236 H355 V206" marker-end="url(#s1-4-red)"/>
+<rect class="sc-chip" x="399.2" y="227" width="45.5" height="18" rx="9"/>
+</svg>
+<span class="sc-tx sc-center sc-b" style="left:73.21%;top:73.43%">LINE / MS Teams chat</span>
+<span class="sc-tx sc-center sc-t-red" style="left:73.21%;top:79.29%">.env pasted in plain text</span>
+<span class="sc-tx sc-center sc-sub" style="left:73.21%;top:85.16%">read · forward · backed up</span>
+<span class="sc-tx sc-center sc-chip-t" style="left:85.24%;top:52.78%">copy &amp; paste</span>
+<span class="sc-tx sc-center sc-chip-t" style="left:50.24%;top:79.68%">paste</span>
+</div>
 </div>
 
-<div class="g-grid-2" style="margin-top: 1rem;">
-  <div class="g-card accent-red compact">
-    <h3>Can't commit it</h3>
-    <p>The real <code>.env</code> holds secrets — it must stay out of git.</p>
-  </div>
-  <div class="g-card accent-red compact">
-    <h3>Chat isn't safe either</h3>
-    <p>No expiry, no revoke, synced to every device and backup.</p>
-  </div>
-</div>
-
----
-layout: default
----
-
-# Scenario 2 · Someone adds a key — silently
-
-<p>🔧 Everyone is in sync. Then one teammate adds a <strong>new required key</strong>
-for a feature and pushes — without telling anyone.</p>
-
-<div class="dp-diagram">
-  <div class="dp-step">
-    <div class="dp-icon dp-icon-blue">🔧</div>
-    <div class="dp-label">Dev A</div>
-    <div class="dp-sub">adds <code>PAYMENT_API_KEY</code></div>
-  </div>
-  <div class="dp-connector">
-    <span class="dp-connector-line"></span>
-    <span class="dp-connector-chip">git push</span>
-  </div>
-  <div class="dp-step">
-    <div class="dp-icon dp-icon-yellow">⬇️</div>
-    <div class="dp-label">Everyone else</div>
-    <div class="dp-sub">git pull, restart</div>
-  </div>
-  <div class="dp-connector">
-    <span class="dp-connector-line"></span>
-    <span class="dp-connector-chip">crash</span>
-  </div>
-  <div class="dp-step">
-    <div class="dp-icon dp-icon-red">❓</div>
-    <div class="dp-label">"who added this?"</div>
-    <div class="dp-sub">asking around for the value</div>
-  </div>
-  <div class="dp-connector">
-    <span class="dp-connector-line"></span>
-    <span class="dp-connector-chip">back to chat</span>
-  </div>
-  <div class="dp-step">
-    <div class="dp-icon dp-icon-red">🔓</div>
-    <div class="dp-label">shared in chat again</div>
-    <div class="dp-sub">same leak, same mess</div>
-  </div>
-</div>
-
-<div class="g-callout danger" style="margin-top: 1.2rem;">
-  <p>Every <code>.env</code> drifts out of sync, time is lost hunting for values,
-  and each fix <strong>re-leaks</strong> secrets through chat.</p>
+<div class="g-callout danger" style="margin-top: 0.6rem;">
+  <p>The real <code>.env</code> can't go in git, so it travels through chat —
+  <strong>secrets end up in message history</strong>.</p>
 </div>
 
 ---
 layout: default
 ---
 
-# Scenario 3 · Encrypt it, commit it
+# Scenario 2 · A new key appears silently
 
-<p>💡 What if the file in git <strong>held the real values — encrypted</strong>?
-Update it, commit, push. Teammates just decrypt.</p>
+<p>Everyone is in sync. Then one teammate adds a <strong>new required key</strong>
+and pushes the code — without telling the team.</p>
 
-<div class="dp-diagram">
-  <div class="dp-step">
-    <div class="dp-icon dp-icon-blue">✏️</div>
-    <div class="dp-label">add / update / remove</div>
-    <div class="dp-sub">edit the key or value</div>
-  </div>
-  <div class="dp-connector">
-    <span class="dp-connector-line"></span>
-    <span class="dp-connector-chip">sops encrypt</span>
-  </div>
-  <div class="dp-step">
-    <div class="dp-icon dp-icon-green">🔒</div>
-    <div class="dp-label"><code>.enc.env</code></div>
-    <div class="dp-sub">ciphertext, safe to commit</div>
-  </div>
-  <div class="dp-connector">
-    <span class="dp-connector-line"></span>
-    <span class="dp-connector-chip">git push / pull</span>
-  </div>
-  <div class="dp-step">
-    <div class="dp-icon dp-icon-yellow">👥</div>
-    <div class="dp-label">every teammate</div>
-    <div class="dp-sub">gets the latest</div>
-  </div>
-  <div class="dp-connector">
-    <span class="dp-connector-line"></span>
-    <span class="dp-connector-chip">sops decrypt</span>
-  </div>
-  <div class="dp-step">
-    <div class="dp-icon dp-icon-success">✅</div>
-    <div class="dp-label"><code>.env</code></div>
-    <div class="dp-sub">up to date, done</div>
-  </div>
+<div class="sc-wrap">
+<div class="sc-layer">
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
+<g class="sc-person sc-fill-blue"><circle cx="60" cy="40" r="14"/><path d="M34 92 Q34 60 60 60 Q86 60 86 92 Z"/></g>
+<rect class="sc-nofill" x="10" y="160" width="180" height="58" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M10 186 V168 a8 8 0 0 1 8 -8 H182 a8 8 0 0 1 8 8 V186 Z"/>
+<path class="sc-thin sc-green" d="M10 186 H190"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="10" y="160" width="180" height="58" rx="8"/>
+<path class="sc-thin sc-green" d="M19 166 H27 L31 170 V180 H19 Z M27 166 V170 H31"/>
+</svg>
+<span class="sc-tx sc-center sc-b" style="left:7.14%;top:34.81%">Dev A</span>
+<span class="sc-tx sc-center sc-sub" style="left:7.14%;top:40.77%">adds a feature</span>
+<span class="sc-tx sc-mono sc-b" style="left:4.40%;top:58.01%">.env</span>
+<span class="sc-tx sc-mono sc-t-green" style="left:2.38%;top:66.63%">+ PAYMENT_API_KEY=sk_…</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s2-1-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<rect class="sc-panel" x="235" y="10" width="215" height="160" rx="12"/>
+<path class="sc-thin sc-blue" style="stroke-width:1.8" d="M255 25 V37 M255 29 C255 35 265 32 265 37"/><circle class="sc-fill-blue" cx="255" cy="24" r="3.5"/><circle class="sc-fill-blue" cx="255" cy="38" r="3.5"/><circle class="sc-fill-blue" cx="265" cy="38" r="3.5"/>
+<rect class="sc-tint-blue" x="394" y="21" width="44" height="20" rx="10"/>
+<rect class="sc-nofill" x="249" y="68" width="187" height="74" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-blue" d="M249 94 V76 a8 8 0 0 1 8 -8 H428 a8 8 0 0 1 8 8 V94 Z"/>
+<path class="sc-thin sc-blue" d="M249 94 H436"/>
+<rect class="sc-nofill sc-blue" style="stroke-width:1.8" x="249" y="68" width="187" height="74" rx="8"/>
+<path class="sc-thin sc-blue" d="M258 74 H266 L270 78 V88 H258 Z M266 74 V78 H270"/>
+<path class="sc-arrow sc-blue" d="M100 76 H223" marker-end="url(#s2-1-blue)"/>
+<rect class="sc-chip" x="129.8" y="49" width="64.4" height="18" rx="9"/>
+</svg>
+<span class="sc-tx sc-b" style="left:32.74%;top:8.60%">Git repo</span>
+<span class="sc-tx sc-center sc-mono sc-t-blue" style="left:49.52%;top:8.84%">main</span>
+<span class="sc-tx sc-sub sc-mono" style="left:29.88%;top:17.61%">src/   package.json   …</span>
+<span class="sc-tx sc-mono sc-b" style="left:32.86%;top:26.28%">payment.js</span>
+<span class="sc-tx sc-mono" style="left:30.83%;top:34.91%">pay(process.env.</span>
+<span class="sc-tx sc-mono" style="left:30.83%;top:40.42%">  PAYMENT_API_KEY)</span>
+<span class="sc-tx sc-center sc-chip-t" style="left:19.29%;top:18.30%">git push</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s2-2-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<g class="sc-person sc-fill-yellow"><circle cx="565" cy="40" r="14"/><path d="M539 92 Q539 60 565 60 Q591 60 591 92 Z"/></g>
+<circle class="sc-tint-red" cx="597" cy="30" r="11"/><circle class="sc-nofill sc-red" style="stroke-width:1.6" cx="597" cy="30" r="11"/>
+<g class="sc-person sc-fill-yellow"><circle cx="680" cy="40" r="14"/><path d="M654 92 Q654 60 680 60 Q706 60 706 92 Z"/></g>
+<circle class="sc-tint-red" cx="712" cy="30" r="11"/><circle class="sc-nofill sc-red" style="stroke-width:1.6" cx="712" cy="30" r="11"/>
+<g class="sc-person sc-fill-yellow"><circle cx="795" cy="40" r="14"/><path d="M769 92 Q769 60 795 60 Q821 60 821 92 Z"/></g>
+<circle class="sc-tint-red" cx="827" cy="30" r="11"/><circle class="sc-nofill sc-red" style="stroke-width:1.6" cx="827" cy="30" r="11"/>
+<path class="sc-arrow sc-blue" d="M462 76 H528" marker-end="url(#s2-2-blue)"/>
+<rect class="sc-chip" x="462.8" y="49" width="64.4" height="18" rx="9"/>
+</svg>
+<span class="sc-tx sc-center sc-b" style="left:67.26%;top:34.81%">Bob</span>
+<span class="sc-tx sc-center sc-b sc-t-red" style="left:71.07%;top:8.26%">?</span>
+<span class="sc-tx sc-center sc-b" style="left:80.95%;top:34.81%">Carol</span>
+<span class="sc-tx sc-center sc-b sc-t-red" style="left:84.76%;top:8.26%">?</span>
+<span class="sc-tx sc-center sc-b" style="left:94.64%;top:34.81%">Dave</span>
+<span class="sc-tx sc-center sc-b sc-t-red" style="left:98.45%;top:8.26%">?</span>
+<span class="sc-tx sc-center sc-chip-t" style="left:58.93%;top:18.30%">git pull</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
+<rect class="sc-tint-red" x="480" y="152" width="345" height="40" rx="10"/><rect class="sc-nofill sc-red" style="stroke-width:1.8" x="480" y="152" width="345" height="40" rx="10"/>
+</svg>
+<span class="sc-tx sc-center sc-b sc-t-red" style="left:77.68%;top:57.22%">app crashes — PAYMENT_API_KEY is missing</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s2-4-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-red" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<rect class="sc-tint-yellow" x="290" y="226" width="290" height="56" rx="10"/><rect class="sc-nofill sc-yellow" style="stroke-width:1.8" x="290" y="226" width="290" height="56" rx="10"/>
+<path class="sc-arrow sc-red sc-dash" d="M700 202 V254 H592" marker-end="url(#s2-4-red)"/>
+<rect class="sc-chip" x="658.4" y="219" width="83.3" height="18" rx="9"/>
+</svg>
+<span class="sc-tx sc-center sc-b" style="left:51.79%;top:82.57%">"Who added the new key?"</span>
+<span class="sc-tx sc-center sc-sub" style="left:51.79%;top:88.43%">"What's the value?" — asking around…</span>
+<span class="sc-tx sc-center sc-chip-t" style="left:83.33%;top:76.92%">ask in chat</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s2-5-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-red" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-red sc-dash" d="M278 254 H100 V222" marker-end="url(#s2-5-red)"/>
+<rect class="sc-chip" x="116.9" y="245" width="146.3" height="18" rx="9"/>
+</svg>
+<span class="sc-tx sc-center sc-chip-t" style="left:22.62%;top:85.89%">paste the value again</span>
+</div>
 </div>
 
-```bash
-# anyone on the team, after git pull
-sops decrypt .enc.env > .env
-```
+<div class="g-callout danger" style="margin-top: 0.6rem;">
+  <p>Files drift out of sync, time is lost hunting for the value, and every fix
+  <strong>leaks the secret through chat again</strong>.</p>
+</div>
 
-<div class="g-callout success" style="margin-top: 1rem;">
-  <p>One source of truth in git, versioned and reviewable, no chat required.
-  That's where <strong>SOPS</strong> comes to the rescue.</p>
+---
+layout: default
+---
+
+# Scenario 3 · Encrypt `.env.example`
+
+<p>What if the file in git <strong>held the real values — encrypted</strong>?
+Change it, commit, push. Teammates just decrypt it into <code>.env</code>.</p>
+
+<div class="sc-wrap">
+<div class="sc-layer">
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
+<g class="sc-person sc-fill-blue"><circle cx="60" cy="40" r="14"/><path d="M34 92 Q34 60 60 60 Q86 60 86 92 Z"/></g>
+<rect class="sc-nofill" x="10" y="160" width="190" height="74" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-yellow" d="M10 186 V168 a8 8 0 0 1 8 -8 H192 a8 8 0 0 1 8 8 V186 Z"/>
+<path class="sc-thin sc-yellow" d="M10 186 H200"/>
+<rect class="sc-nofill sc-yellow" style="stroke-width:1.8" x="10" y="160" width="190" height="74" rx="8"/>
+<path class="sc-thin sc-yellow" d="M19 166 H27 L31 170 V180 H19 Z M27 166 V170 H31"/>
+</svg>
+<span class="sc-tx sc-center sc-b" style="left:7.14%;top:34.81%">Dev A</span>
+<span class="sc-tx sc-center sc-sub" style="left:7.14%;top:40.77%">edits one file</span>
+<span class="sc-tx sc-mono sc-b" style="left:4.40%;top:58.01%">.env.example</span>
+<span class="sc-tx sc-mono" style="left:2.38%;top:66.63%">API_KEY=abc123</span>
+<span class="sc-tx sc-mono" style="left:2.38%;top:72.15%">+ NEW_KEY=xyz789</span>
+<span class="sc-tx sc-sub" style="left:25.24%;top:64.22%">plain text,</span>
+<span class="sc-tx sc-sub" style="left:25.24%;top:69.73%">local only</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s3-1-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker><marker id="s3-1-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-green" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M100 80 H210" marker-end="url(#s3-1-blue)"/>
+<rect class="sc-chip" x="110.2" y="53" width="89.6" height="18" rx="9"/>
+<path class="sc-arrow sc-green" style="stroke-width:3" d="M233 72 V66 a7 7 0 0 1 14 0 V72"/><rect class="sc-fill-green" x="229" y="72" width="22" height="16" rx="3"/>
+<path class="sc-arrow sc-green" d="M272 80 H294" marker-end="url(#s3-1-green)"/>
+<rect class="sc-panel" x="305" y="10" width="215" height="160" rx="12"/>
+<path class="sc-thin sc-blue" style="stroke-width:1.8" d="M325 25 V37 M325 29 C325 35 335 32 335 37"/><circle class="sc-fill-blue" cx="325" cy="24" r="3.5"/><circle class="sc-fill-blue" cx="325" cy="38" r="3.5"/><circle class="sc-fill-blue" cx="335" cy="38" r="3.5"/>
+<rect class="sc-tint-blue" x="464" y="21" width="44" height="20" rx="10"/>
+<rect class="sc-nofill" x="319" y="68" width="187" height="90" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M319 94 V76 a8 8 0 0 1 8 -8 H498 a8 8 0 0 1 8 8 V94 Z"/>
+<path class="sc-thin sc-green" d="M319 94 H506"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="319" y="68" width="187" height="90" rx="8"/>
+<path class="sc-thin sc-green" d="M328 74 H336 L340 78 V88 H328 Z M336 74 V78 H340"/>
+</svg>
+<span class="sc-tx sc-center sc-chip-t" style="left:18.45%;top:19.68%">sops encrypt</span>
+<span class="sc-tx sc-b" style="left:41.07%;top:8.60%">Git repo</span>
+<span class="sc-tx sc-center sc-mono sc-t-blue" style="left:57.86%;top:8.84%">main</span>
+<span class="sc-tx sc-sub sc-mono" style="left:38.21%;top:17.61%">src/   package.json   …</span>
+<span class="sc-tx sc-mono sc-b" style="left:41.19%;top:26.28%">.env.example</span>
+<span class="sc-tx sc-mono" style="left:39.17%;top:34.91%">API_KEY=ENC[AES…]</span>
+<span class="sc-tx sc-mono" style="left:39.17%;top:40.42%">NEW_KEY=ENC[AES…]</span>
+<span class="sc-tx sc-mono sc-t-green" style="left:39.17%;top:45.94%">encrypted, safe in git</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s3-2-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-blue" d="M536 80 H593" marker-end="url(#s3-2-blue)"/>
+<rect class="sc-chip" x="532.8" y="53" width="64.4" height="18" rx="9"/>
+<g class="sc-person sc-fill-yellow"><circle cx="630" cy="40" r="14"/><path d="M604 92 Q604 60 630 60 Q656 60 656 92 Z"/></g>
+<g class="sc-person sc-fill-yellow"><circle cx="772" cy="40" r="14"/><path d="M746 92 Q746 60 772 60 Q798 60 798 92 Z"/></g>
+</svg>
+<span class="sc-tx sc-center sc-chip-t" style="left:67.26%;top:19.68%">git pull</span>
+<span class="sc-tx sc-center sc-b" style="left:75.00%;top:34.81%">Sam</span>
+<span class="sc-tx sc-center sc-sub" style="left:75.00%;top:40.77%">new teammate</span>
+<span class="sc-tx sc-center sc-b" style="left:91.90%;top:34.81%">Bob</span>
+<span class="sc-tx sc-center sc-sub" style="left:91.90%;top:40.77%">existing</span>
+</div>
+<div class="sc-layer" v-click>
+<svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s3-3-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-green" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<path class="sc-arrow sc-green" d="M630 138 V186" marker-end="url(#s3-3-green)"/>
+<rect class="sc-chip" x="585.2" y="151" width="89.6" height="18" rx="9"/>
+<rect class="sc-nofill" x="564" y="196" width="132" height="74" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M564 222 V204 a8 8 0 0 1 8 -8 H688 a8 8 0 0 1 8 8 V222 Z"/>
+<path class="sc-thin sc-green" d="M564 222 H696"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="564" y="196" width="132" height="74" rx="8"/>
+<path class="sc-thin sc-green" d="M573 202 H581 L585 206 V216 H573 Z M581 202 V206 H585"/>
+<path class="sc-arrow sc-green" d="M772 138 V186" marker-end="url(#s3-3-green)"/>
+<rect class="sc-chip" x="727.2" y="151" width="89.6" height="18" rx="9"/>
+<rect class="sc-nofill" x="706" y="196" width="132" height="74" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M706 222 V204 a8 8 0 0 1 8 -8 H830 a8 8 0 0 1 8 8 V222 Z"/>
+<path class="sc-thin sc-green" d="M706 222 H838"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="706" y="196" width="132" height="74" rx="8"/>
+<path class="sc-thin sc-green" d="M715 202 H723 L727 206 V216 H715 Z M723 202 V206 H727"/>
+<circle class="sc-fill-green" cx="330" cy="250" r="10"/><path d="M325.5 250 L329 253.5 L335 246.5" fill="none" style="stroke:var(--g-bg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+<span class="sc-tx sc-center sc-chip-t" style="left:75.00%;top:53.47%">sops decrypt</span>
+<span class="sc-tx sc-mono sc-b" style="left:70.36%;top:70.42%">.env</span>
+<span class="sc-tx sc-mono" style="left:68.33%;top:79.04%">API_KEY=abc123</span>
+<span class="sc-tx sc-mono" style="left:68.33%;top:84.56%">NEW_KEY=xyz789</span>
+<span class="sc-tx sc-center sc-chip-t" style="left:91.90%;top:53.47%">sops decrypt</span>
+<span class="sc-tx sc-mono sc-b" style="left:87.26%;top:70.42%">.env</span>
+<span class="sc-tx sc-mono" style="left:85.24%;top:79.04%">API_KEY=abc123</span>
+<span class="sc-tx sc-mono" style="left:85.24%;top:84.56%">NEW_KEY=xyz789</span>
+<span class="sc-tx sc-b" style="left:41.43%;top:84.12%">everyone gets the same .env</span>
+</div>
+</div>
+
+<div class="g-callout success" style="margin-top: 0.6rem;">
+  <p>One source of truth in git, no chat needed — <strong>SOPS</strong> to the
+  rescue. Next slides call the encrypted file <code>.enc.env</code>.</p>
 </div>
 
 ---

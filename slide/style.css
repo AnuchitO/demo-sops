@@ -640,3 +640,53 @@ html.dark .g-callout,
 html.dark .dk-node {
   box-shadow: none;
 }
+
+/* ---------------------------------------------------------------
+   Scenario illustrations (.sc-*)
+   Inline SVG drawings: people, git repo, files, chat, arrows.
+   Colours come only from the --g-* tokens so dark mode just works.
+   --------------------------------------------------------------- */
+.sc-svg { width: 100%; height: auto; display: block; margin-top: 0.4rem; }
+.sc-wrap { position: relative; container-type: inline-size; margin-top: 0.4rem; aspect-ratio: 840 / 290; }
+.sc-layer { position: absolute; inset: 0; }
+.sc-layer .sc-svg { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; }
+.sc-tx {
+  position: absolute; white-space: nowrap; line-height: 1;
+  font-size: calc(13 / 840 * 100cqw); color: var(--g-text);
+}
+.sc-tx.sc-mono { font-family: 'Fira Code', monospace; font-size: calc(11.5 / 840 * 100cqw); }
+.sc-tx.sc-b { font-weight: 700; }
+.sc-tx.sc-sub { color: var(--g-text-secondary); font-size: calc(11.5 / 840 * 100cqw); }
+.sc-tx.sc-center { transform: translateX(-50%); text-align: center; }
+.sc-tx.sc-t-red { color: var(--g-red); }
+.sc-tx.sc-t-green { color: var(--g-green); }
+.sc-tx.sc-t-blue { color: var(--g-blue); }
+.sc-tx.sc-chip-t { font-family: 'Fira Code', monospace; font-size: calc(10.5 / 840 * 100cqw); color: var(--g-text-secondary); }
+
+.sc-svg .sc-panel { fill: var(--g-card); stroke: var(--g-border); stroke-width: 1.5; }
+.sc-svg .sc-file { fill: var(--g-bg); stroke-width: 1.8; }
+.sc-svg .sc-blue { stroke: var(--g-blue); }
+.sc-svg .sc-green { stroke: var(--g-green); }
+.sc-svg .sc-yellow { stroke: var(--g-yellow); }
+.sc-svg .sc-red { stroke: var(--g-red); }
+.sc-svg .sc-fill-blue { fill: var(--g-blue); }
+.sc-svg .sc-fill-green { fill: var(--g-green); }
+.sc-svg .sc-fill-yellow { fill: var(--g-yellow); }
+.sc-svg .sc-fill-red { fill: var(--g-red); }
+.sc-svg .sc-tint-red { fill: var(--g-callout-red-bg); }
+.sc-svg .sc-tint-green { fill: var(--g-callout-green-bg); }
+.sc-svg .sc-tint-yellow { fill: var(--g-callout-yellow-bg); }
+.sc-svg .sc-tint-blue { fill: var(--g-callout-blue-bg); }
+
+.sc-svg .sc-hd-blue { fill: var(--g-callout-blue-bg); }
+.sc-svg .sc-hd-green { fill: var(--g-callout-green-bg); }
+.sc-svg .sc-hd-yellow { fill: var(--g-callout-yellow-bg); }
+.sc-svg .sc-hd-red { fill: var(--g-callout-red-bg); }
+.sc-svg .sc-nofill { fill: none; }
+.sc-svg .sc-thin { stroke-width: 1.4; fill: none; }
+.sc-svg .sc-person { stroke: none; opacity: 0.9; }
+.sc-svg .sc-arrow { fill: none; stroke-width: 2.2; }
+.sc-svg .sc-dash { stroke-dasharray: 6 5; animation: sc-flow 1.2s linear infinite; }
+.sc-svg .sc-chip { fill: var(--g-bg); stroke: var(--g-border); stroke-width: 1; }
+
+@keyframes sc-flow { to { stroke-dashoffset: -22; } }
