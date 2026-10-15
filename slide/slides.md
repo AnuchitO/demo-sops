@@ -126,7 +126,7 @@ Git only has <code>.env.example</code>: the keys, none of the values.</p>
 <div class="sc-layer" v-click>
 <svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s1-1-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
 <path class="sc-arrow sc-blue" d="M235 80 H318" marker-end="url(#s1-1-blue)"/>
-<rect class="sc-chip" x="241.7" y="53" width="70.7" height="18" rx="9"/>
+<rect class="sc-chip" x="240.3" y="53" width="73.4" height="18" rx="9"/>
 <rect class="sc-tint-red" x="280" y="150" width="150" height="46" rx="10"/><rect class="sc-nofill sc-red" style="stroke-width:1.8" x="280" y="150" width="150" height="46" rx="10"/>
 </svg>
 <span class="sc-tx sc-center sc-chip-t" style="left:32.98%;top:19.68%">git clone</span>
@@ -142,7 +142,7 @@ Git only has <code>.env.example</code>: the keys, none of the values.</p>
 <rect class="sc-nofill sc-yellow" style="stroke-width:1.8" x="545" y="30" width="170" height="90" rx="8"/>
 <path class="sc-thin sc-yellow" d="M554 36 H562 L566 40 V50 H554 Z M562 36 V40 H566"/>
 <path class="sc-arrow sc-yellow sc-dash" d="M392 70 H533" marker-end="url(#s1-2-yellow)"/>
-<rect class="sc-chip" x="382.6" y="41" width="158.9" height="18" rx="9"/>
+<rect class="sc-chip" x="379.1" y="41" width="165.8" height="18" rx="9"/>
 </svg>
 <span class="sc-tx sc-center sc-b" style="left:93.45%;top:34.81%">Alice</span>
 <span class="sc-tx sc-center sc-sub" style="left:93.45%;top:40.77%">existing teammate</span>
@@ -171,9 +171,9 @@ Git only has <code>.env.example</code>: the keys, none of the values.</p>
 <svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s1-4-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-red" d="M0 0 L10 5 L0 10 z"/></marker></defs>
 <rect class="sc-tint-red" x="500" y="200" width="230" height="72" rx="10"/><rect class="sc-nofill sc-red" style="stroke-width:1.8" x="500" y="200" width="230" height="72" rx="10"/>
 <path class="sc-arrow sc-red sc-dash" d="M640 128 V188" marker-end="url(#s1-4-red)"/>
-<rect class="sc-chip" x="671.2" y="149" width="89.6" height="18" rx="9"/>
+<rect class="sc-chip" x="669.4" y="149" width="93.2" height="18" rx="9"/>
 <path class="sc-arrow sc-red sc-dash" d="M490 236 H355 V206" marker-end="url(#s1-4-red)"/>
-<rect class="sc-chip" x="399.2" y="227" width="45.5" height="18" rx="9"/>
+<rect class="sc-chip" x="398.5" y="227" width="47.0" height="18" rx="9"/>
 </svg>
 <span class="sc-tx sc-center sc-b" style="left:73.21%;top:73.43%">LINE / MS Teams chat</span>
 <span class="sc-tx sc-center sc-t-red" style="left:73.21%;top:79.29%">.env pasted in plain text</span>
@@ -223,7 +223,7 @@ and pushes the code — without telling the team.</p>
 <rect class="sc-nofill sc-blue" style="stroke-width:1.8" x="249" y="68" width="187" height="74" rx="8"/>
 <path class="sc-thin sc-blue" d="M258 74 H266 L270 78 V88 H258 Z M266 74 V78 H270"/>
 <path class="sc-arrow sc-blue" d="M100 76 H223" marker-end="url(#s2-1-blue)"/>
-<rect class="sc-chip" x="129.8" y="49" width="64.4" height="18" rx="9"/>
+<rect class="sc-chip" x="128.6" y="49" width="66.8" height="18" rx="9"/>
 </svg>
 <span class="sc-tx sc-b" style="left:32.74%;top:8.60%">Git repo</span>
 <span class="sc-tx sc-center sc-mono sc-t-blue" style="left:49.52%;top:8.84%">main</span>
@@ -242,7 +242,7 @@ and pushes the code — without telling the team.</p>
 <g class="sc-person sc-fill-yellow"><circle cx="795" cy="40" r="14"/><path d="M769 92 Q769 60 795 60 Q821 60 821 92 Z"/></g>
 <circle class="sc-tint-red" cx="827" cy="30" r="11"/><circle class="sc-nofill sc-red" style="stroke-width:1.6" cx="827" cy="30" r="11"/>
 <path class="sc-arrow sc-blue" d="M462 76 H528" marker-end="url(#s2-2-blue)"/>
-<rect class="sc-chip" x="462.8" y="49" width="64.4" height="18" rx="9"/>
+<rect class="sc-chip" x="461.6" y="49" width="66.8" height="18" rx="9"/>
 </svg>
 <span class="sc-tx sc-center sc-b" style="left:67.26%;top:34.81%">Bob</span>
 <span class="sc-tx sc-center sc-b sc-t-red" style="left:71.07%;top:8.26%">?</span>
@@ -262,7 +262,7 @@ and pushes the code — without telling the team.</p>
 <svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s2-4-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-red" d="M0 0 L10 5 L0 10 z"/></marker></defs>
 <rect class="sc-tint-yellow" x="290" y="226" width="290" height="56" rx="10"/><rect class="sc-nofill sc-yellow" style="stroke-width:1.8" x="290" y="226" width="290" height="56" rx="10"/>
 <path class="sc-arrow sc-red sc-dash" d="M700 202 V254 H592" marker-end="url(#s2-4-red)"/>
-<rect class="sc-chip" x="658.4" y="219" width="83.3" height="18" rx="9"/>
+<rect class="sc-chip" x="656.7" y="219" width="86.6" height="18" rx="9"/>
 </svg>
 <span class="sc-tx sc-center sc-b" style="left:51.79%;top:82.57%">"Who added the new key?"</span>
 <span class="sc-tx sc-center sc-sub" style="left:51.79%;top:88.43%">"What's the value?" — asking around…</span>
@@ -271,7 +271,7 @@ and pushes the code — without telling the team.</p>
 <div class="sc-layer" v-click>
 <svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s2-5-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-red" d="M0 0 L10 5 L0 10 z"/></marker></defs>
 <path class="sc-arrow sc-red sc-dash" d="M278 254 H100 V222" marker-end="url(#s2-5-red)"/>
-<rect class="sc-chip" x="116.9" y="245" width="146.3" height="18" rx="9"/>
+<rect class="sc-chip" x="113.7" y="245" width="152.6" height="18" rx="9"/>
 </svg>
 <span class="sc-tx sc-center sc-chip-t" style="left:22.62%;top:85.89%">paste the value again</span>
 </div>
@@ -312,7 +312,7 @@ Change it, commit, push. Teammates just decrypt it into <code>.env</code>.</p>
 <div class="sc-layer" v-click>
 <svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s3-1-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker><marker id="s3-1-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-green" d="M0 0 L10 5 L0 10 z"/></marker></defs>
 <path class="sc-arrow sc-blue" d="M100 80 H210" marker-end="url(#s3-1-blue)"/>
-<rect class="sc-chip" x="110.2" y="53" width="89.6" height="18" rx="9"/>
+<rect class="sc-chip" x="108.4" y="53" width="93.2" height="18" rx="9"/>
 <path class="sc-arrow sc-green" style="stroke-width:3" d="M233 72 V66 a7 7 0 0 1 14 0 V72"/><rect class="sc-fill-green" x="229" y="72" width="22" height="16" rx="3"/>
 <path class="sc-arrow sc-green" d="M272 80 H294" marker-end="url(#s3-1-green)"/>
 <rect class="sc-panel" x="305" y="10" width="215" height="160" rx="12"/>
@@ -336,7 +336,7 @@ Change it, commit, push. Teammates just decrypt it into <code>.env</code>.</p>
 <div class="sc-layer" v-click>
 <svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s3-2-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
 <path class="sc-arrow sc-blue" d="M536 80 H593" marker-end="url(#s3-2-blue)"/>
-<rect class="sc-chip" x="532.8" y="53" width="64.4" height="18" rx="9"/>
+<rect class="sc-chip" x="531.6" y="53" width="66.8" height="18" rx="9"/>
 <g class="sc-person sc-fill-yellow"><circle cx="630" cy="40" r="14"/><path d="M604 92 Q604 60 630 60 Q656 60 656 92 Z"/></g>
 <g class="sc-person sc-fill-yellow"><circle cx="772" cy="40" r="14"/><path d="M746 92 Q746 60 772 60 Q798 60 798 92 Z"/></g>
 </svg>
@@ -349,14 +349,14 @@ Change it, commit, push. Teammates just decrypt it into <code>.env</code>.</p>
 <div class="sc-layer" v-click>
 <svg class="sc-svg" viewBox="0 0 840 290" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s3-3-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-green" d="M0 0 L10 5 L0 10 z"/></marker></defs>
 <path class="sc-arrow sc-green" d="M630 138 V186" marker-end="url(#s3-3-green)"/>
-<rect class="sc-chip" x="585.2" y="151" width="89.6" height="18" rx="9"/>
+<rect class="sc-chip" x="583.4" y="151" width="93.2" height="18" rx="9"/>
 <rect class="sc-nofill" x="564" y="196" width="132" height="74" rx="8" style="fill:var(--g-bg)"/>
 <path class="sc-hd-green" d="M564 222 V204 a8 8 0 0 1 8 -8 H688 a8 8 0 0 1 8 8 V222 Z"/>
 <path class="sc-thin sc-green" d="M564 222 H696"/>
 <rect class="sc-nofill sc-green" style="stroke-width:1.8" x="564" y="196" width="132" height="74" rx="8"/>
 <path class="sc-thin sc-green" d="M573 202 H581 L585 206 V216 H573 Z M581 202 V206 H585"/>
 <path class="sc-arrow sc-green" d="M772 138 V186" marker-end="url(#s3-3-green)"/>
-<rect class="sc-chip" x="727.2" y="151" width="89.6" height="18" rx="9"/>
+<rect class="sc-chip" x="725.4" y="151" width="93.2" height="18" rx="9"/>
 <rect class="sc-nofill" x="706" y="196" width="132" height="74" rx="8" style="fill:var(--g-bg)"/>
 <path class="sc-hd-green" d="M706 222 V204 a8 8 0 0 1 8 -8 H830 a8 8 0 0 1 8 8 V222 Z"/>
 <path class="sc-thin sc-green" d="M706 222 H838"/>
@@ -409,7 +409,7 @@ to share; Alice adds it as a <strong>recipient</strong>, and Sam can decrypt.</p
 <svg class="sc-svg" viewBox="0 0 840 310" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s4-1-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
 <g class="sc-person sc-fill-yellow"><circle cx="780" cy="30" r="14"/><path d="M754 82 Q754 50 780 50 Q806 50 806 82 Z"/></g>
 <path class="sc-arrow sc-blue" d="M98 66 H742" marker-end="url(#s4-1-blue)"/>
-<rect class="sc-chip" x="343.7" y="57" width="152.6" height="18" rx="9"/>
+<rect class="sc-chip" x="340.4" y="57" width="159.2" height="18" rx="9"/>
 </svg>
 <span class="sc-tx sc-center sc-b" style="left:92.86%;top:29.34%">Alice</span>
 <span class="sc-tx sc-center sc-chip-t" style="left:50.00%;top:19.70%">public key: age1sam7x…</span>
@@ -442,7 +442,7 @@ to share; Alice adds it as a <strong>recipient</strong>, and Sam can decrypt.</p
 <rect class="sc-nofill sc-green" style="stroke-width:1.8" x="304" y="200" width="187" height="74" rx="8"/>
 <path class="sc-thin sc-green" d="M313 206 H321 L325 210 V220 H313 Z M321 206 V210 H325"/>
 <path class="sc-arrow sc-blue" d="M645 200 H517" marker-end="url(#s4-3-blue)"/>
-<rect class="sc-chip" x="520.5" y="171" width="121.1" height="18" rx="9"/>
+<rect class="sc-chip" x="517.9" y="171" width="126.2" height="18" rx="9"/>
 </svg>
 <span class="sc-tx sc-b" style="left:39.29%;top:50.63%">Git repo</span>
 <span class="sc-tx sc-center sc-mono sc-t-blue" style="left:56.07%;top:50.85%">main</span>
@@ -455,9 +455,9 @@ to share; Alice adds it as a <strong>recipient</strong>, and Sam can decrypt.</p
 <div class="sc-layer" v-click>
 <svg class="sc-svg" viewBox="0 0 840 310" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s4-4-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker><marker id="s4-4-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-green" d="M0 0 L10 5 L0 10 z"/></marker></defs>
 <path class="sc-arrow sc-blue" d="M280 175 H182" marker-end="url(#s4-4-blue)"/>
-<rect class="sc-chip" x="198.8" y="166" width="64.4" height="18" rx="9"/>
+<rect class="sc-chip" x="197.6" y="166" width="66.8" height="18" rx="9"/>
 <path class="sc-arrow sc-green" d="M90 210 V240" marker-end="url(#s4-4-green)"/>
-<rect class="sc-chip" x="103.2" y="216" width="89.6" height="18" rx="9"/>
+<rect class="sc-chip" x="101.4" y="216" width="93.2" height="18" rx="9"/>
 <rect class="sc-nofill" x="10" y="246" width="160" height="58" rx="8" style="fill:var(--g-bg)"/>
 <path class="sc-hd-green" d="M10 272 V254 a8 8 0 0 1 8 -8 H162 a8 8 0 0 1 8 8 V272 Z"/>
 <path class="sc-thin sc-green" d="M10 272 H170"/>
@@ -498,62 +498,50 @@ layout: default
 </div>
 <div class="sc-layer" v-click>
 <svg class="sc-svg" viewBox="0 0 840 300" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s5-1-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
-<path class="sc-arrow sc-blue" d="M182 82 H290" marker-end="url(#s5-1-blue)"/>
-<rect class="sc-chip" x="181.8" y="55" width="108.5" height="18" rx="9"/>
-<rect class="sc-panel" x="300" y="10" width="215" height="144" rx="12"/>
-<path class="sc-thin sc-blue" style="stroke-width:1.8" d="M320 25 V37 M320 29 C320 35 330 32 330 37"/><circle class="sc-fill-blue" cx="320" cy="24" r="3.5"/><circle class="sc-fill-blue" cx="320" cy="38" r="3.5"/><circle class="sc-fill-blue" cx="330" cy="38" r="3.5"/>
-<rect class="sc-tint-blue" x="459" y="21" width="44" height="20" rx="10"/>
-<rect class="sc-nofill" x="314" y="68" width="187" height="74" rx="8" style="fill:var(--g-bg)"/>
-<path class="sc-hd-green" d="M314 94 V76 a8 8 0 0 1 8 -8 H493 a8 8 0 0 1 8 8 V94 Z"/>
-<path class="sc-thin sc-green" d="M314 94 H501"/>
-<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="314" y="68" width="187" height="74" rx="8"/>
-<path class="sc-thin sc-green" d="M323 74 H331 L335 78 V88 H323 Z M331 74 V78 H335"/>
+<path class="sc-arrow sc-blue" d="M182 82 H280" marker-end="url(#s5-1-blue)"/>
+<rect class="sc-chip" x="174.5" y="55" width="113.0" height="18" rx="9"/>
+<rect class="sc-panel" x="290" y="10" width="215" height="144" rx="12"/>
+<path class="sc-thin sc-blue" style="stroke-width:1.8" d="M310 25 V37 M310 29 C310 35 320 32 320 37"/><circle class="sc-fill-blue" cx="310" cy="24" r="3.5"/><circle class="sc-fill-blue" cx="310" cy="38" r="3.5"/><circle class="sc-fill-blue" cx="320" cy="38" r="3.5"/>
+<rect class="sc-tint-blue" x="449" y="21" width="44" height="20" rx="10"/>
+<rect class="sc-nofill" x="304" y="68" width="187" height="74" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M304 94 V76 a8 8 0 0 1 8 -8 H483 a8 8 0 0 1 8 8 V94 Z"/>
+<path class="sc-thin sc-green" d="M304 94 H491"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="304" y="68" width="187" height="74" rx="8"/>
+<path class="sc-thin sc-green" d="M313 74 H321 L325 78 V88 H313 Z M321 74 V78 H325"/>
 </svg>
-<span class="sc-tx sc-center sc-chip-t" style="left:28.10%;top:19.69%">edit + git push</span>
-<span class="sc-tx sc-b" style="left:40.48%;top:8.32%">Git repo</span>
-<span class="sc-tx sc-center sc-mono sc-t-blue" style="left:57.26%;top:8.55%">main</span>
-<span class="sc-tx sc-sub sc-mono" style="left:37.62%;top:17.03%">src/   package.json   …</span>
-<span class="sc-tx sc-mono sc-b" style="left:40.60%;top:25.41%">.env.example</span>
-<span class="sc-tx sc-mono" style="left:38.57%;top:33.74%">API_KEY=ENC[AES…]</span>
-<span class="sc-tx sc-mono" style="left:38.57%;top:39.07%">DB_URL=ENC[AES…]</span>
-<span class="sc-tx sc-center sc-b sc-t-green" style="left:48.45%;top:54.98%">the single source of truth</span>
+<span class="sc-tx sc-center sc-chip-t" style="left:27.50%;top:19.69%">edit + git push</span>
+<span class="sc-tx sc-b" style="left:39.29%;top:8.32%">Git repo</span>
+<span class="sc-tx sc-center sc-mono sc-t-blue" style="left:56.07%;top:8.55%">main</span>
+<span class="sc-tx sc-sub sc-mono" style="left:36.43%;top:17.03%">src/   package.json   …</span>
+<span class="sc-tx sc-mono sc-b" style="left:39.40%;top:25.41%">.env.example</span>
+<span class="sc-tx sc-mono" style="left:37.38%;top:33.74%">API_KEY=ENC[AES…]</span>
+<span class="sc-tx sc-mono" style="left:37.38%;top:39.07%">DB_URL=ENC[AES…]</span>
+<span class="sc-tx sc-center sc-b sc-t-green" style="left:47.26%;top:54.98%">the single source of truth</span>
 </div>
 <div class="sc-layer" v-click>
 <svg class="sc-svg" viewBox="0 0 840 300" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s5-2-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-blue" d="M0 0 L10 5 L0 10 z"/></marker></defs>
-<path class="sc-arrow sc-blue" d="M527 82 H598" marker-end="url(#s5-2-blue)"/>
-<rect class="sc-chip" x="529.8" y="55" width="64.4" height="18" rx="9"/>
-<g class="sc-person sc-fill-yellow"><circle cx="640" cy="40" r="14"/><path d="M614 92 Q614 60 640 60 Q666 60 666 92 Z"/></g>
-<g class="sc-person sc-fill-yellow"><circle cx="775" cy="40" r="14"/><path d="M749 92 Q749 60 775 60 Q801 60 801 92 Z"/></g>
+<path class="sc-arrow sc-blue" d="M517 82 H645" marker-end="url(#s5-2-blue)"/>
+<rect class="sc-chip" x="547.6" y="55" width="66.8" height="18" rx="9"/>
+<g class="sc-person sc-fill-yellow"><circle cx="680" cy="40" r="14"/><path d="M654 92 Q654 60 680 60 Q706 60 706 92 Z"/></g>
 </svg>
-<span class="sc-tx sc-center sc-chip-t" style="left:66.90%;top:19.69%">git pull</span>
-<span class="sc-tx sc-center sc-b" style="left:76.19%;top:33.65%">Sam</span>
-<span class="sc-tx sc-center sc-b" style="left:92.26%;top:33.65%">Bob</span>
+<span class="sc-tx sc-center sc-chip-t" style="left:69.17%;top:19.69%">git pull</span>
+<span class="sc-tx sc-center sc-b" style="left:80.95%;top:33.65%">Sam</span>
+<span class="sc-tx sc-center sc-sub" style="left:80.95%;top:39.41%">any teammate</span>
 </div>
 <div class="sc-layer" v-click>
 <svg class="sc-svg" viewBox="0 0 840 300" xmlns="http://www.w3.org/2000/svg" role="img"><defs><marker id="s5-3-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sc-fill-green" d="M0 0 L10 5 L0 10 z"/></marker></defs>
-<path class="sc-arrow sc-green" d="M640 124 V170" marker-end="url(#s5-3-green)"/>
-<rect class="sc-chip" x="595.2" y="138" width="89.6" height="18" rx="9"/>
-<rect class="sc-nofill" x="578" y="180" width="124" height="74" rx="8" style="fill:var(--g-bg)"/>
-<path class="sc-hd-green" d="M578 206 V188 a8 8 0 0 1 8 -8 H694 a8 8 0 0 1 8 8 V206 Z"/>
-<path class="sc-thin sc-green" d="M578 206 H702"/>
-<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="578" y="180" width="124" height="74" rx="8"/>
-<path class="sc-thin sc-green" d="M587 186 H595 L599 190 V200 H587 Z M595 186 V190 H599"/>
-<path class="sc-arrow sc-green" d="M775 124 V170" marker-end="url(#s5-3-green)"/>
-<rect class="sc-chip" x="730.2" y="138" width="89.6" height="18" rx="9"/>
-<rect class="sc-nofill" x="713" y="180" width="124" height="74" rx="8" style="fill:var(--g-bg)"/>
-<path class="sc-hd-green" d="M713 206 V188 a8 8 0 0 1 8 -8 H829 a8 8 0 0 1 8 8 V206 Z"/>
-<path class="sc-thin sc-green" d="M713 206 H837"/>
-<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="713" y="180" width="124" height="74" rx="8"/>
-<path class="sc-thin sc-green" d="M722 186 H730 L734 190 V200 H722 Z M730 186 V190 H734"/>
+<path class="sc-arrow sc-green" d="M680 124 V170" marker-end="url(#s5-3-green)"/>
+<rect class="sc-chip" x="590.5" y="138" width="179.0" height="18" rx="9"/>
+<rect class="sc-nofill" x="618" y="180" width="124" height="74" rx="8" style="fill:var(--g-bg)"/>
+<path class="sc-hd-green" d="M618 206 V188 a8 8 0 0 1 8 -8 H734 a8 8 0 0 1 8 8 V206 Z"/>
+<path class="sc-thin sc-green" d="M618 206 H742"/>
+<rect class="sc-nofill sc-green" style="stroke-width:1.8" x="618" y="180" width="124" height="74" rx="8"/>
+<path class="sc-thin sc-green" d="M627 186 H635 L639 190 V200 H627 Z M635 186 V190 H639"/>
 </svg>
-<span class="sc-tx sc-center sc-chip-t" style="left:76.19%;top:47.36%">sops decrypt</span>
-<span class="sc-tx sc-mono sc-b" style="left:72.02%;top:62.74%">.env</span>
-<span class="sc-tx sc-mono" style="left:70.00%;top:71.08%">API_KEY=abc123</span>
-<span class="sc-tx sc-mono" style="left:70.00%;top:76.41%">DB_URL=pg://…</span>
-<span class="sc-tx sc-center sc-chip-t" style="left:92.26%;top:47.36%">sops decrypt</span>
-<span class="sc-tx sc-mono sc-b" style="left:88.10%;top:62.74%">.env</span>
-<span class="sc-tx sc-mono" style="left:86.07%;top:71.08%">API_KEY=abc123</span>
-<span class="sc-tx sc-mono" style="left:86.07%;top:76.41%">DB_URL=pg://…</span>
+<span class="sc-tx sc-center sc-chip-t" style="left:80.95%;top:47.36%">sops decrypt .env.example</span>
+<span class="sc-tx sc-mono sc-b" style="left:76.79%;top:62.74%">.env</span>
+<span class="sc-tx sc-mono" style="left:74.76%;top:71.08%">API_KEY=abc123</span>
+<span class="sc-tx sc-mono" style="left:74.76%;top:76.41%">DB_URL=pg://…</span>
 </div>
 <div class="sc-layer" v-click>
 <svg class="sc-svg" viewBox="0 0 840 300" xmlns="http://www.w3.org/2000/svg" role="img"><defs></defs>
@@ -562,7 +550,7 @@ layout: default
 </svg>
 <span class="sc-tx sc-center sc-b sc-t-green" style="left:17.26%;top:69.98%">✓  change only .env.example</span>
 <span class="sc-tx sc-center sc-b sc-t-red" style="left:17.26%;top:87.32%">✗  never edit .env by hand</span>
-<span class="sc-tx sc-center sc-sub" style="left:76.19%;top:88.74%">a result, gitignored</span>
+<span class="sc-tx sc-center sc-sub" style="left:80.95%;top:88.74%">a result, gitignored</span>
 </div>
 </div>
 
