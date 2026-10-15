@@ -95,6 +95,164 @@ layout: default
 layout: default
 ---
 
+# Scenario 1 · The new teammate can't start the project
+
+<p>🧑‍💻 Sam joins the team, clones the repo, and runs it — but <strong>there is no <code>.env</code></strong>.
+Git only has <code>.env.example</code>: keys, no values.</p>
+
+<div class="dp-diagram">
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-blue">🧑‍💻</div>
+    <div class="dp-label">Sam (new)</div>
+    <div class="dp-sub">clones the repo</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">npm start</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-red">💥</div>
+    <div class="dp-label">missing <code>.env</code></div>
+    <div class="dp-sub">only keys, no values</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">"can you send it?"</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-yellow">💬</div>
+    <div class="dp-label">LINE / Teams chat</div>
+    <div class="dp-sub">paste the whole file</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">copy &amp; paste</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-red">🔓</div>
+    <div class="dp-label">secrets in chat history</div>
+    <div class="dp-sub">searchable, forwardable</div>
+  </div>
+</div>
+
+<div class="g-grid-2" style="margin-top: 1rem;">
+  <div class="g-card accent-red compact">
+    <h3>Can't commit it</h3>
+    <p>The real <code>.env</code> holds secrets — it must stay out of git.</p>
+  </div>
+  <div class="g-card accent-red compact">
+    <h3>Chat isn't safe either</h3>
+    <p>No expiry, no revoke, synced to every device and backup.</p>
+  </div>
+</div>
+
+---
+layout: default
+---
+
+# Scenario 2 · Someone adds a key — silently
+
+<p>🔧 Everyone is in sync. Then one teammate adds a <strong>new required key</strong>
+for a feature and pushes — without telling anyone.</p>
+
+<div class="dp-diagram">
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-blue">🔧</div>
+    <div class="dp-label">Dev A</div>
+    <div class="dp-sub">adds <code>PAYMENT_API_KEY</code></div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">git push</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-yellow">⬇️</div>
+    <div class="dp-label">Everyone else</div>
+    <div class="dp-sub">git pull, restart</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">crash</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-red">❓</div>
+    <div class="dp-label">"who added this?"</div>
+    <div class="dp-sub">asking around for the value</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">back to chat</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-red">🔓</div>
+    <div class="dp-label">shared in chat again</div>
+    <div class="dp-sub">same leak, same mess</div>
+  </div>
+</div>
+
+<div class="g-callout danger" style="margin-top: 1.2rem;">
+  <p>Every <code>.env</code> drifts out of sync, time is lost hunting for values,
+  and each fix <strong>re-leaks</strong> secrets through chat.</p>
+</div>
+
+---
+layout: default
+---
+
+# Scenario 3 · Encrypt it, commit it
+
+<p>💡 What if the file in git <strong>held the real values — encrypted</strong>?
+Update it, commit, push. Teammates just decrypt.</p>
+
+<div class="dp-diagram">
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-blue">✏️</div>
+    <div class="dp-label">add / update / remove</div>
+    <div class="dp-sub">edit the key or value</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">sops encrypt</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-green">🔒</div>
+    <div class="dp-label"><code>.enc.env</code></div>
+    <div class="dp-sub">ciphertext, safe to commit</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">git push / pull</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-yellow">👥</div>
+    <div class="dp-label">every teammate</div>
+    <div class="dp-sub">gets the latest</div>
+  </div>
+  <div class="dp-connector">
+    <span class="dp-connector-line"></span>
+    <span class="dp-connector-chip">sops decrypt</span>
+  </div>
+  <div class="dp-step">
+    <div class="dp-icon dp-icon-success">✅</div>
+    <div class="dp-label"><code>.env</code></div>
+    <div class="dp-sub">up to date, done</div>
+  </div>
+</div>
+
+```bash
+# anyone on the team, after git pull
+sops decrypt .enc.env > .env
+```
+
+<div class="g-callout success" style="margin-top: 1rem;">
+  <p>One source of truth in git, versioned and reviewable, no chat required.
+  That's where <strong>SOPS</strong> comes to the rescue.</p>
+</div>
+
+---
+layout: default
+---
+
 # Requirements
 
 <h2>Two small, open-source tools</h2>
